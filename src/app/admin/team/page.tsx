@@ -1,4 +1,4 @@
-import { getTeamMembers, createTeamMember, reorderTeamMember, updateTeamMember } from "@/actions/team";
+import { getTeamMembers, createTeamMember, reorderTeamMember, updateTeamMember, deleteTeamMember } from "@/actions/team";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -60,6 +60,12 @@ export default async function AdminTeamPage({ searchParams }: { searchParams: Pr
       revalidatePath("/");
       redirect("/admin/team");
     }
+  }
+
+  async function handleDelete(formData: FormData) {
+    "use server";
+    const id = formData.get("id") as string;
+    await deleteTeamMember(id);
   }
 
   async function moveUp(id: string) {
@@ -176,6 +182,14 @@ export default async function AdminTeamPage({ searchParams }: { searchParams: Pr
                         </button>
                       </form>
                     </div>
+                    {m.position.toLowerCase() !== "secretary" && m.position.toLowerCase() !== "secy" && m.position.toLowerCase() !== "representative" && m.position.toLowerCase() !== "rep" && (
+                      <form action={handleDelete} style={{ alignSelf: 'center' }}>
+                        <input type="hidden" name="id" value={m.id} />
+                        <button type="submit" className="p-2 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded hover:bg-[rgba(255,50,50,0.8)] hover:border-[rgba(255,50,50,0.8)] transition flex items-center justify-center text-[var(--text-secondary)] hover:text-white" title="Delete">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        </button>
+                      </form>
+                    )}
                   </div>
                 </div>
               );
