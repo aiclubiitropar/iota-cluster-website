@@ -93,8 +93,8 @@ export default async function Home() {
           <div className={styles.galleryGrid}>
             {recentGallery.map(img => (
               <div key={img.id} className={`glass-panel ${styles.galleryImageCard}`}>
-                <img src={img.imageUrl} alt={img.title} className={styles.galleryImage} />
-                <div className={styles.galleryTitle}>{img.title}</div>
+                <img src={img.imageUrl} alt={img.title || "Gallery Image"} className={styles.galleryImage} />
+                {img.title && <div className={styles.galleryTitle}>{img.title}</div>}
               </div>
             ))}
           </div>
