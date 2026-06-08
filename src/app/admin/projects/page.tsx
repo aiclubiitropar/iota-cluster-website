@@ -73,7 +73,7 @@ export default async function AdminProjectsPage({ searchParams }: { searchParams
   return (
     <div>
       <h1 className={styles.pageTitle}>Manage Projects</h1>
-      
+
       {errorMsg && (
         <div style={{ padding: '1rem', backgroundColor: 'rgba(255,0,0,0.1)', border: '1px solid red', borderRadius: '8px', marginBottom: '1rem', color: '#ff8888' }}>
           <strong>Error:</strong> {errorMsg}
@@ -87,11 +87,11 @@ export default async function AdminProjectsPage({ searchParams }: { searchParams
           <input type="text" name="title" placeholder="Project Title *" required className={styles.input} />
           <textarea name="description" placeholder="Project Description *" required rows={3} className={styles.input} />
           <input type="text" name="tags" placeholder="Tags (comma separated) *" required className={styles.input} />
-          
+
           {role !== "member" && (
             <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: '0.5rem 0', color: 'var(--text-primary)' }}>
               <input type="checkbox" name="isAiSoc" />
-              <span>☑ Is this an AI Soc project? (Hides from main projects page)</span>
+              <span>☑ Is this an AI Soc project?</span>
             </label>
           )}
 
@@ -104,7 +104,7 @@ export default async function AdminProjectsPage({ searchParams }: { searchParams
             <input type="url" name="liveUrl" placeholder="Live Demo URL (Optional)" className={styles.input} />
             <input type="url" name="deploymentUrl" placeholder="Deployment URL (Optional)" className={styles.input} style={{ gridColumn: '1 / -1' }} />
           </div>
-          
+
           <SubmitButton defaultText="Add Project" loadingText="Adding Project..." className={`btn-primary ${styles.submitBtn}`} />
         </form>
       </div>
@@ -125,7 +125,7 @@ export default async function AdminProjectsPage({ searchParams }: { searchParams
                       <input type="text" name="title" defaultValue={p.title} placeholder="Project Title *" required className={styles.input} />
                       <textarea name="description" defaultValue={p.description} placeholder="Project Description *" required rows={3} className={styles.input} />
                       <input type="text" name="tags" defaultValue={p.tags} placeholder="Tags (comma separated) *" required className={styles.input} />
-                      
+
                       {role !== "member" && (
                         <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: '0.5rem 0', color: 'var(--text-primary)' }}>
                           <input type="checkbox" name="isAiSoc" defaultChecked={p.isAiSoc} />
@@ -142,7 +142,7 @@ export default async function AdminProjectsPage({ searchParams }: { searchParams
                         <input type="url" name="liveUrl" defaultValue={p.liveUrl || ""} placeholder="Live Demo URL (Optional)" className={styles.input} />
                         <input type="url" name="deploymentUrl" defaultValue={p.deploymentUrl || ""} placeholder="Deployment URL (Optional)" className={styles.input} style={{ gridColumn: '1 / -1' }} />
                       </div>
-                      
+
                       <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
                         <SubmitButton defaultText="Save Changes" loadingText="Saving..." className={`btn-primary ${styles.submitBtn}`} style={{ margin: 0, flex: 1 }} />
                         <Link href="/admin/projects" scroll={false} className={`btn-secondary ${styles.submitBtn}`} style={{ margin: 0, flex: 1, textAlign: 'center', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}>Cancel</Link>

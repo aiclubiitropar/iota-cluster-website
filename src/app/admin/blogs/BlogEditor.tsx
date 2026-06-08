@@ -7,8 +7,8 @@ import SubmitButton from "@/components/SubmitButton";
 import { createBlog, updateBlog } from "@/actions/blogs";
 import { useRouter } from "next/navigation";
 
-// Dynamically import ReactQuill to prevent SSR issues
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+// Dynamically import react-quill-new to prevent SSR issues and fix React 19 findDOMNode errors
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
 export default function BlogEditor({ 
   existingBlog = null 
