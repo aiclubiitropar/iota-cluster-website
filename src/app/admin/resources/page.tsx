@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import styles from "../admin.module.css";
-import SubmitButton from "@/components/SubmitButton";
+import ResourceForm from "./ResourceForm";
 import { getCurrentRole } from "@/actions/auth";
 
 export const dynamic = 'force-dynamic';
@@ -35,20 +35,7 @@ export default async function AdminResourcesPage({ searchParams }: { searchParam
 
       <div className={`glass-panel ${styles.formSection}`}>
         <h2 className={styles.sectionTitle}>Add New Node</h2>
-        <form action={addResourceAction} className={styles.form}>
-          <input type="text" name="title" placeholder="Resource Title *" required className={styles.input} />
-          <textarea name="description" placeholder="Short Description / Objectives" rows={3} className={styles.input} />
-          
-          <div className={`${styles.inputGrid}`}>
-            <input type="url" name="youtubeUrl" placeholder="YouTube Video URL (Optional)" className={styles.input} />
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
-              <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Upload Attachments (Multiple allowed)</label>
-              <input type="file" name="files" multiple className={styles.input} style={{ padding: '0.4rem' }} />
-            </div>
-          </div>
-
-          <SubmitButton defaultText="Add to Roadmap" loadingText="Adding..." className={`btn-primary ${styles.submitBtn}`} />
-        </form>
+        <ResourceForm mode="add" />
       </div>
 
       <div className="glass-panel p-6">
@@ -62,26 +49,7 @@ export default async function AdminResourcesPage({ searchParams }: { searchParam
                 return (
                   <div key={r.id} className={`${styles.listItem} ${styles.formSection}`} style={{ display: 'block', padding: '1.5rem', border: '1px solid var(--accent-cyan)' }}>
                     <h3 style={{ marginBottom: '1rem', color: 'var(--text-primary)', fontWeight: 'bold' }}>Editing {r.title}</h3>
-                    <form action={editResourceAction} className={styles.form}>
-                      <input type="hidden" name="id" value={r.id} />
-                      <input type="hidden" name="existingFiles" value={JSON.stringify(r.fileUrls || [])} />
-                      
-                      <input type="text" name="title" defaultValue={r.title} placeholder="Resource Title *" required className={styles.input} />
-                      <textarea name="description" defaultValue={r.description || ""} placeholder="Short Description / Objectives" rows={3} className={styles.input} />
-                      
-                      <div className={`${styles.inputGrid}`}>
-                        <input type="url" name="youtubeUrl" defaultValue={r.youtubeUrl || ""} placeholder="YouTube Video URL (Optional)" className={styles.input} />
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
-                          <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Add More Attachments (Existing: {r.fileUrls.length})</label>
-                          <input type="file" name="files" multiple className={styles.input} style={{ padding: '0.4rem' }} />
-                        </div>
-                      </div>
-
-                      <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
-                        <SubmitButton defaultText="Save Changes" loadingText="Saving..." className={`btn-primary ${styles.submitBtn}`} style={{ margin: 0, flex: 1 }} />
-                        <Link href="/admin/resources" scroll={false} className={`btn-secondary ${styles.submitBtn}`} style={{ margin: 0, flex: 1, textAlign: 'center', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}>Cancel</Link>
-                      </div>
-                    </form>
+                    <ResourceForm mode="edit" initialData={r} />
                   </div>
                 );
               }
