@@ -143,3 +143,52 @@ export async function reorderResource(id: string, direction: "up" | "down") {
     return { success: false, error: "Failed to reorder" };
   }
 }
+
+import { redirect } from "next/navigation";
+
+export async function addResourceAction(formData: FormData) {
+  const fileEntries = formData.getAll("files") as File[];
+  await createResource({
+    title: formData.get("title") as string,
+    description: formData.get("description") as string,
+    youtubeUrl: formData.get("youtubeUrl") as string || undefined,
+    files: fileEntries,
+  });
+}
+
+export async function editResourceAction(formData: FormData) {
+  const id = formData.get("id") as string;
+  const fileEntries = formData.getAll("files") as File[];
+  const existingFilesStr = formData.get("existingFiles") as string;
+  let existingFiles: string[] = [];
+  try {
+    if (existingFilesStr) existingFiles = JSON.parse(existingFilesStr);
+  } catch(e) {}
+
+  const result = await updateResource(id, {
+    title: formData.get("title") as string,
+    description: formData.get("description") as string,
+    youtubeUrl: formData.get("youtubeUrl") as string || undefined,
+    files: fileEntries,
+    existingFiles,
+  });
+
+  if (!result.success) {
+    redirect(`/admin/resources?error=${encodeURIComponent(result.error as string)}`);
+  } else {
+    redirect("/admin/resources");
+  }
+}
+
+export async function deleteResourceAction(formData: FormData) {
+  const id = formData.get("id") as string;
+  await deleteResource(id);
+}
+
+export async function moveUpAction(id: string) {
+  await reorderResource(id, "up");
+}
+
+export async function moveDownAction(id: string) {
+  await reorderResource(id, "down");
+}

@@ -1,4 +1,4 @@
-import { getResources, createResource, reorderResource, updateResource, deleteResource } from "@/actions/resources";
+import { getResources, addResourceAction, editResourceAction, deleteResourceAction, moveUpAction, moveDownAction } from "@/actions/resources";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -22,68 +22,6 @@ export default async function AdminResourcesPage({ searchParams }: { searchParam
 
   const resources = await getResources();
 
-  async function addResource(formData: FormData) {
-    "use server";
-    
-    // Process files
-    const fileEntries = formData.getAll("files") as File[];
-    
-    await createResource({
-      title: formData.get("title") as string,
-      description: formData.get("description") as string,
-      youtubeUrl: formData.get("youtubeUrl") as string || undefined,
-      files: fileEntries,
-    });
-    
-    revalidatePath("/admin/resources");
-    revalidatePath("/resources");
-  }
-
-  async function updateResourceAction(formData: FormData) {
-    "use server";
-    const id = formData.get("id") as string;
-    
-    const fileEntries = formData.getAll("files") as File[];
-    const existingFilesStr = formData.get("existingFiles") as string;
-    let existingFiles: string[] = [];
-    try {
-      if (existingFilesStr) existingFiles = JSON.parse(existingFilesStr);
-    } catch(e) {}
-
-    const result = await updateResource(id, {
-      title: formData.get("title") as string,
-      description: formData.get("description") as string,
-      youtubeUrl: formData.get("youtubeUrl") as string || undefined,
-      files: fileEntries,
-      existingFiles,
-    });
-
-    if (!result.success) {
-      console.error(result.error);
-      redirect(`/admin/resources?error=${encodeURIComponent(result.error as string)}`);
-    } else {
-      revalidatePath("/admin/resources");
-      revalidatePath("/resources");
-      redirect("/admin/resources");
-    }
-  }
-
-  async function handleDelete(formData: FormData) {
-    "use server";
-    const id = formData.get("id") as string;
-    await deleteResource(id);
-  }
-
-  async function moveUp(id: string) {
-    "use server";
-    await reorderResource(id, "up");
-  }
-
-  async function moveDown(id: string) {
-    "use server";
-    await reorderResource(id, "down");
-  }
-
   return (
     <div>
       <h1 className={styles.pageTitle}>Manage Resources Roadmap</h1>
@@ -97,7 +35,7 @@ export default async function AdminResourcesPage({ searchParams }: { searchParam
 
       <div className={`glass-panel ${styles.formSection}`}>
         <h2 className={styles.sectionTitle}>Add New Node</h2>
-        <form action={addResource} className={styles.form}>
+        <form action={addResourceAction} className={styles.form}>
           <input type="text" name="title" placeholder="Resource Title *" required className={styles.input} />
           <textarea name="description" placeholder="Short Description / Objectives" rows={3} className={styles.input} />
           
@@ -124,7 +62,7 @@ export default async function AdminResourcesPage({ searchParams }: { searchParam
                 return (
                   <div key={r.id} className={`${styles.listItem} ${styles.formSection}`} style={{ display: 'block', padding: '1.5rem', border: '1px solid var(--accent-cyan)' }}>
                     <h3 style={{ marginBottom: '1rem', color: 'var(--text-primary)', fontWeight: 'bold' }}>Editing {r.title}</h3>
-                    <form action={updateResourceAction} className={styles.form}>
+                    <form action={editResourceAction} className={styles.form}>
                       <input type="hidden" name="id" value={r.id} />
                       <input type="hidden" name="existingFiles" value={JSON.stringify(r.fileUrls || [])} />
                       
@@ -165,18 +103,18 @@ export default async function AdminResourcesPage({ searchParams }: { searchParam
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                     </Link>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                      <form action={moveUp.bind(null, r.id)}>
+                      <form action={moveUpAction.bind(null, r.id)}>
                         <button type="submit" disabled={i === 0} className="p-1 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded hover:bg-[var(--accent-purple)] hover:border-[var(--accent-purple)] hover:text-white transition disabled:opacity-30 flex items-center justify-center text-[var(--text-secondary)]" title="Move Up">
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
                         </button>
                       </form>
-                      <form action={moveDown.bind(null, r.id)}>
+                      <form action={moveDownAction.bind(null, r.id)}>
                         <button type="submit" disabled={i === resources.length - 1} className="p-1 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded hover:bg-[var(--accent-purple)] hover:border-[var(--accent-purple)] hover:text-white transition disabled:opacity-30 flex items-center justify-center text-[var(--text-secondary)]" title="Move Down">
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </button>
                       </form>
                     </div>
-                    <form action={handleDelete} style={{ alignSelf: 'center' }}>
+                    <form action={deleteResourceAction} style={{ alignSelf: 'center' }}>
                       <input type="hidden" name="id" value={r.id} />
                       <button type="submit" className="p-2 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded hover:bg-[rgba(255,50,50,0.8)] hover:border-[rgba(255,50,50,0.8)] transition flex items-center justify-center text-[var(--text-secondary)] hover:text-white" title="Delete">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
