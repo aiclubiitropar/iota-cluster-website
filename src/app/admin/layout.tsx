@@ -22,6 +22,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
       </aside>
       <main className={`glass-panel ${styles.mainArea}`}>
+        <header style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '2rem' }}>
+          <form action="/api/auth/logout" method="POST">
+            <button formAction={async () => {
+              "use server";
+              const { logoutAdmin } = await import("@/actions/auth");
+              await logoutAdmin();
+            }} className="btn-primary" style={{ padding: '0.5rem 1rem', background: 'rgba(255, 50, 50, 0.2)', border: '1px solid rgba(255, 50, 50, 0.5)', color: '#ff6b6b' }}>
+              Logout
+            </button>
+          </form>
+        </header>
         {children}
       </main>
     </div>

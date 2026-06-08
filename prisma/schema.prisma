@@ -10,6 +10,8 @@ model TeamMember {
   id           String   @id @default(uuid())
   name         String
   position     String
+  email        String?  @unique
+  password     String?
   imageUrl     String?
   linkedinUrl  String?
   githubUrl    String?

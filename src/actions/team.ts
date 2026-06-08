@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import bcrypt from "bcryptjs";
 
 export async function getTeamMembers() {
   return await prisma.teamMember.findMany({
@@ -33,9 +34,32 @@ export async function reorderTeamMember(id: string, direction: "up" | "down") {
   revalidatePath("/");
 }
 
-export async function createTeamMember(data: { name: string; position: string; imageUrl?: string; linkedinUrl?: string; githubUrl?: string }) {
+export async function createTeamMember(data: { 
+  name: string; 
+  position: string; 
+  email?: string;
+  password?: string;
+  imageUrl?: string; 
+  linkedinUrl?: string; 
+  githubUrl?: string 
+}) {
   try {
-    const member = await prisma.teamMember.create({ data });
+    let hashedPassword = undefined;
+    if (data.password) {
+      hashedPassword = await bcrypt.hash(data.password, 10);
+    }
+
+    const member = await prisma.teamMember.create({ 
+      data: {
+        name: data.name,
+        position: data.position,
+        email: data.email || undefined,
+        password: hashedPassword,
+        imageUrl: data.imageUrl,
+        linkedinUrl: data.linkedinUrl,
+        githubUrl: data.githubUrl,
+      } 
+    });
     revalidatePath("/team");
     revalidatePath("/admin/team");
     return { success: true, member };

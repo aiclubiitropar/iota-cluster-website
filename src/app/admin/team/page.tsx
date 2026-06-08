@@ -12,6 +12,8 @@ export default async function AdminTeamPage() {
     await createTeamMember({
       name: formData.get("name") as string,
       position: formData.get("position") as string,
+      email: formData.get("email") as string || undefined,
+      password: formData.get("password") as string || undefined,
       imageUrl: formData.get("imageUrl") as string || undefined,
       linkedinUrl: formData.get("linkedinUrl") as string || undefined,
       githubUrl: formData.get("githubUrl") as string || undefined,
@@ -40,6 +42,8 @@ export default async function AdminTeamPage() {
           <div className={`${styles.inputGrid} ${styles.inputGrid2}`}>
             <input type="text" name="name" placeholder="Full Name *" required className={styles.input} />
             <input type="text" name="position" placeholder="Position *" required className={styles.input} />
+            <input type="email" name="email" placeholder="Email (@iitrpr.ac.in) (Optional)" className={styles.input} />
+            <input type="password" name="password" placeholder="Password (Optional)" className={styles.input} />
             <input type="url" name="imageUrl" placeholder="Image URL (Optional)" className={styles.input} />
             <input type="url" name="linkedinUrl" placeholder="LinkedIn URL (Optional)" className={styles.input} />
             <input type="url" name="githubUrl" placeholder="GitHub URL (Optional)" className={styles.input} />
