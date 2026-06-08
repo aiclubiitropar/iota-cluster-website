@@ -47,14 +47,18 @@ export default function LoginPage() {
 
           <div className={styles.inputGroup}>
             <label htmlFor="position" className={styles.label}>Position</label>
-            <input 
-              type="text" 
+            <select 
               id="position" 
               name="position" 
               className={styles.input} 
-              required 
-              placeholder="e.g. Developer"
-            />
+              required
+            >
+              <option value="">Select a Position</option>
+              <option value="Secretary">Secretary</option>
+              <option value="Representative">Representative</option>
+              <option value="Mentors">Mentors</option>
+              <option value="Coordinators">Coordinators</option>
+            </select>
           </div>
           
           <div className={styles.inputGroup}>

@@ -44,6 +44,16 @@ export async function createTeamMember(data: {
   githubUrl?: string 
 }) {
   try {
+    // Enforce Singleton roles
+    if (data.position === "Secretary" || data.position === "Representative") {
+      const existing = await prisma.teamMember.findFirst({
+        where: { position: data.position }
+      });
+      if (existing) {
+        return { success: false, error: `Only one ${data.position} is allowed.` };
+      }
+    }
+
     let hashedPassword = undefined;
     if (data.password) {
       hashedPassword = await bcrypt.hash(data.password, 10);

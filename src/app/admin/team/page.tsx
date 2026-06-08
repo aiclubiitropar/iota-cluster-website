@@ -41,7 +41,13 @@ export default async function AdminTeamPage() {
         <form action={addMember} className={styles.form}>
           <div className={`${styles.inputGrid} ${styles.inputGrid2}`}>
             <input type="text" name="name" placeholder="Full Name *" required className={styles.input} />
-            <input type="text" name="position" placeholder="Position *" required className={styles.input} />
+            <select name="position" required className={styles.input}>
+              <option value="">Select Position *</option>
+              <option value="Secretary">Secretary</option>
+              <option value="Representative">Representative</option>
+              <option value="Mentors">Mentors</option>
+              <option value="Coordinators">Coordinators</option>
+            </select>
             <input type="email" name="email" placeholder="Email (@iitrpr.ac.in) (Optional)" className={styles.input} />
             <input type="password" name="password" placeholder="Password (Optional)" className={styles.input} />
             <input type="url" name="imageUrl" placeholder="Image URL (Optional)" className={styles.input} />
