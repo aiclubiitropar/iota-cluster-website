@@ -48,8 +48,8 @@ export default async function AdminTeamPage() {
               <option value="Mentors">Mentors</option>
               <option value="Coordinators">Coordinators</option>
             </select>
-            <input type="email" name="email" placeholder="Email (@iitrpr.ac.in) (Optional)" className={styles.input} />
-            <input type="password" name="password" placeholder="Password (Optional)" className={styles.input} />
+            <input type="email" name="email" placeholder="Email (@iitrpr.ac.in) *" required className={styles.input} />
+            <input type="password" name="password" placeholder="Password *" required className={styles.input} />
             <input type="url" name="imageUrl" placeholder="Image URL (Optional)" className={styles.input} />
             <input type="url" name="linkedinUrl" placeholder="LinkedIn URL (Optional)" className={styles.input} />
             <input type="url" name="githubUrl" placeholder="GitHub URL (Optional)" className={styles.input} />

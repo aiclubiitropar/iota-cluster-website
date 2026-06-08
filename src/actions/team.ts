@@ -6,6 +6,18 @@ import bcrypt from "bcryptjs";
 
 export async function getTeamMembers() {
   return await prisma.teamMember.findMany({
+    select: {
+      id: true,
+      name: true,
+      position: true,
+      email: true,
+      imageUrl: true,
+      linkedinUrl: true,
+      githubUrl: true,
+      order: true,
+      createdAt: true,
+      updatedAt: true,
+    },
     orderBy: [{ order: "asc" }, { createdAt: "asc" }]
   });
 }
@@ -37,8 +49,8 @@ export async function reorderTeamMember(id: string, direction: "up" | "down") {
 export async function createTeamMember(data: { 
   name: string; 
   position: string; 
-  email?: string;
-  password?: string;
+  email: string;
+  password: string;
   imageUrl?: string; 
   linkedinUrl?: string; 
   githubUrl?: string 
