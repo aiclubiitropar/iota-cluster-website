@@ -1,4 +1,5 @@
 import { getGalleryImages } from "@/actions/gallery";
+import Image from "next/image";
 import styles from "./page.module.css";
 
 export const dynamic = 'force-dynamic';
@@ -25,7 +26,13 @@ export default async function GalleryPage() {
         <div className={styles.grid}>
           {images.map((img) => (
             <div key={img.id} className={`glass-panel ${styles.card}`}>
-              <img src={img.imageUrl} alt={img.title || "Gallery Image"} className={styles.image} />
+              <Image 
+                src={img.imageUrl} 
+                alt={img.title || "Gallery Image"} 
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                className={styles.image} 
+              />
               {img.title && (
                 <div className={styles.overlay}>
                   <p className={styles.imageTitle}>{img.title}</p>
