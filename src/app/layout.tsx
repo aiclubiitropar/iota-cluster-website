@@ -35,6 +35,9 @@ export default function RootLayout({
                 <Link href="/team" className={styles.navLink}>Team</Link>
                 <Link href="/projects" className={styles.navLink}>Projects</Link>
                 <Link href="/gallery" className={styles.navLink}>Gallery</Link>
+                <Link href="/resources" className={styles.navLink}>Resources</Link>
+                <Link href="/ai-soc" className={styles.navLink}>AI Soc</Link>
+                <Link href="/blogs" className={styles.navLink}>Blogs</Link>
               </div>
             </div>
           </div>
