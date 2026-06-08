@@ -61,7 +61,7 @@ export default async function AdminBlogsPage({ searchParams }: { searchParams: P
                     <Link href={`/admin/blogs?edit=${blog.id}`} scroll={false} className="p-2 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded hover:bg-[var(--accent-cyan)] hover:border-[var(--accent-cyan)] transition flex items-center justify-center text-[var(--text-primary)] hover:text-black" title="Edit">
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                     </Link>
-                    <form action={handleDelete} onSubmit={(e) => { if(!confirm("Are you sure you want to delete this blog?")) e.preventDefault(); }}>
+                    <form action={handleDelete}>
                       <input type="hidden" name="id" value={blog.id} />
                       <button type="submit" className="p-2 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded hover:bg-[rgba(255,50,50,0.8)] hover:border-[rgba(255,50,50,0.8)] transition flex items-center justify-center text-[var(--text-secondary)] hover:text-white" title="Delete">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
