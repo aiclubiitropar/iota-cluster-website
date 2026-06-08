@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
-import { SignJWT } from "jose";
+import { SignJWT, jwtVerify } from "jose";
 
 const secretKey = new TextEncoder().encode(process.env.JWT_SECRET || "default_fallback_secret_for_development_only");
 

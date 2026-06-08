@@ -58,6 +58,7 @@ export default function LoginPage() {
               <option value="Representative">Representative</option>
               <option value="Mentors">Mentors</option>
               <option value="Coordinators">Coordinators</option>
+              <option value="Members">Members</option>
             </select>
           </div>
           

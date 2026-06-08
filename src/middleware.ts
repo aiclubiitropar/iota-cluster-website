@@ -27,7 +27,7 @@ export async function middleware(request: NextRequest) {
 
       // RBAC for gallery management
       if (request.nextUrl.pathname.startsWith('/admin/gallery')) {
-        const restrictedRoles = ["member"];
+        const restrictedRoles = ["members"];
         if (restrictedRoles.includes(position)) {
           return NextResponse.redirect(new URL('/admin', request.url));
         }

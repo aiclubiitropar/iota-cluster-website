@@ -90,9 +90,10 @@ export default async function AdminTeamPage({ searchParams }: { searchParams: Pr
             <select name="position" required className={styles.input} style={{ appearance: 'auto' }}>
               <option value="" disabled selected>Select Position *</option>
               <option value="Secretary">Secretary</option>
-              <option value="Joint Secretary">Joint Secretary</option>
-              <option value="Coordinator">Coordinator</option>
-              <option value="Member">Member</option>
+              <option value="Representative">Representative</option>
+              <option value="Mentors">Mentors</option>
+              <option value="Coordinators">Coordinators</option>
+              <option value="Members">Members</option>
             </select>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <input type="url" name="imageUrl" placeholder="Image URL (Or upload below)" className={styles.input} />
@@ -125,9 +126,10 @@ export default async function AdminTeamPage({ searchParams }: { searchParams: Pr
                         <select name="position" defaultValue={m.position} required className={styles.input} style={{ appearance: 'auto' }}>
                           <option value="" disabled>Select Position *</option>
                           <option value="Secretary">Secretary</option>
-                          <option value="Joint Secretary">Joint Secretary</option>
-                          <option value="Coordinator">Coordinator</option>
-                          <option value="Member">Member</option>
+                          <option value="Representative">Representative</option>
+                          <option value="Mentors">Mentors</option>
+                          <option value="Coordinators">Coordinators</option>
+                          <option value="Members">Members</option>
                         </select>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                           <input type="url" name="imageUrl" defaultValue={m.imageUrl || ""} placeholder="Image URL (Or upload below)" className={styles.input} />

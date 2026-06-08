@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function TeamPage() {
   const allMembers = await getTeamMembers();
-  const members = allMembers.filter(m => m.position.toLowerCase() !== "member");
+  const members = allMembers.filter(m => m.position.toLowerCase() !== "members");
 
   return (
     <div className={styles.container}>

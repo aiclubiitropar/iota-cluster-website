@@ -10,7 +10,7 @@ export default async function AISocPage() {
   const allMembers = await getTeamMembers();
 
   const aiSocProjects = allProjects.filter(p => p.isAiSoc);
-  const aiSocContributors = allMembers.filter(m => m.position.toLowerCase() === "member");
+  const aiSocContributors = allMembers.filter(m => m.position.toLowerCase() === "members");
 
   return (
     <div className={projectStyles.container}>
