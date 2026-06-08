@@ -13,6 +13,7 @@ export default async function AdminProjectsPage() {
       imageUrl: formData.get("imageUrl") as string || undefined,
       githubUrl: formData.get("githubUrl") as string || undefined,
       liveUrl: formData.get("liveUrl") as string || undefined,
+      deploymentUrl: formData.get("deploymentUrl") as string || undefined,
       tags: formData.get("tags") as string,
     });
     revalidatePath("/admin/projects");
@@ -35,6 +36,7 @@ export default async function AdminProjectsPage() {
             <input type="url" name="imageUrl" placeholder="Image URL (Optional)" className={styles.input} />
             <input type="url" name="githubUrl" placeholder="GitHub URL (Optional)" className={styles.input} />
             <input type="url" name="liveUrl" placeholder="Live Demo URL (Optional)" className={styles.input} />
+            <input type="url" name="deploymentUrl" placeholder="Deployment URL (Optional)" className={styles.input} style={{ gridColumn: '1 / -1' }} />
           </div>
           
           <button type="submit" className={`btn-primary ${styles.submitBtn}`}>Add Project</button>

@@ -15,7 +15,15 @@ export async function getProjects() {
   }
 }
 
-export async function createProject(data: { title: string; description: string; tags: string; imageUrl?: string; githubUrl?: string; liveUrl?: string }) {
+export async function createProject(data: {
+  title: string;
+  description: string;
+  imageUrl?: string;
+  githubUrl?: string;
+  liveUrl?: string;
+  deploymentUrl?: string;
+  tags: string;
+}) {
   try {
     const project = await prisma.project.create({ data });
     revalidatePath("/projects");

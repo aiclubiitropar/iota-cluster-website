@@ -25,6 +25,7 @@ model Project {
   imageUrl    String?
   githubUrl   String?
   liveUrl     String?
+  deploymentUrl String?
   tags        String   // comma separated or JSON
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
