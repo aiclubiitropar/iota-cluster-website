@@ -40,7 +40,7 @@ export async function createGalleryImages(data: { title?: string; imageUrl?: str
 
     // If an image URL is provided, create one entry
     if (data.imageUrl && data.imageUrl.trim() !== "") {
-      const img = await prisma.galleryImage.create({ data: { title: data.title || null, imageUrl: data.imageUrl } });
+      const img = await prisma.galleryImage.create({ data: { title: data.title || "", imageUrl: data.imageUrl } });
       createdImages.push(img);
     }
 
@@ -51,7 +51,7 @@ export async function createGalleryImages(data: { title?: string; imageUrl?: str
           const uploadUrl = await uploadImageToStorage(file);
           if (uploadUrl) {
             // Optional: use filename if multiple files, or just the same title
-            const imgTitle = data.imageFiles.length > 1 && data.title ? `${data.title} - ${file.name}` : data.title || null;
+            const imgTitle = data.imageFiles.length > 1 && data.title ? `${data.title} - ${file.name}` : data.title || "";
             const img = await prisma.galleryImage.create({ data: { title: imgTitle, imageUrl: uploadUrl } });
             createdImages.push(img);
           }
@@ -86,7 +86,7 @@ export async function updateGalleryImage(id: string, data: { title?: string; ima
 
     const img = await prisma.galleryImage.update({
       where: { id },
-      data: { title: data.title || null, imageUrl: finalUrl }
+      data: { title: data.title || "", imageUrl: finalUrl }
     });
     revalidatePath("/admin/gallery");
     revalidatePath("/");
