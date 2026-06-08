@@ -4,6 +4,9 @@ import { getCurrentRole } from "@/actions/auth";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const role = await getCurrentRole();
+  const isFullAccess = role === "secretary" || role === "representative" || role === "admin" || role === "secy" || role === "rep";
+  const isMember = role === "members" || role === "member";
+
   return (
     <div className={styles.layoutContainer}>
       <aside className={`glass-panel ${styles.sidebar}`}>
@@ -12,15 +15,17 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <Link href="/admin" className={styles.navLink}>
             Overview
           </Link>
-          {role !== "members" && (
+          {isFullAccess && (
             <Link href="/admin/team" className={styles.navLink}>
               Manage Team
             </Link>
           )}
-          <Link href="/admin/projects" className={styles.navLink}>
-            Manage Projects
-          </Link>
-          {role !== "members" && (
+          {!isMember && (
+            <Link href="/admin/projects" className={styles.navLink}>
+              Manage Projects
+            </Link>
+          )}
+          {!isMember && (
             <Link href="/admin/gallery" className={styles.navLink}>
               Manage Gallery
             </Link>
