@@ -134,8 +134,8 @@ export default async function AdminTeamPage({ searchParams }: { searchParams: Pr
               return (
                 <div key={m.id} className={styles.listItem} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p className={styles.itemTitle} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{m.name}</p>
-                    <p className={styles.itemSubtitle} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{m.position}</p>
+                    <p className={styles.itemTitle}>{m.name}</p>
+                    <p className={styles.itemSubtitle}>{m.position}</p>
                   </div>
                   <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
                     <Link href={`/admin/team?edit=${m.id}`} className="p-2 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded hover:bg-[var(--accent-cyan)] hover:border-[var(--accent-cyan)] transition flex items-center justify-center text-[var(--text-primary)] hover:text-black" title="Edit" style={{ height: 'fit-content', alignSelf: 'center' }}>
