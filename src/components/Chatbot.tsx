@@ -1,6 +1,11 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css';
 import styles from "./Chatbot.module.css";
 
 type Message = {
@@ -130,7 +135,12 @@ export default function Chatbot() {
           <div className={styles.chatBody}>
             {messages.map((msg, idx) => (
               <div key={idx} className={`${styles.message} ${styles[msg.role]}`}>
-                {msg.content}
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm, remarkMath]}
+                  rehypePlugins={[rehypeKatex]}
+                >
+                  {msg.content}
+                </ReactMarkdown>
               </div>
             ))}
             {statusText && (

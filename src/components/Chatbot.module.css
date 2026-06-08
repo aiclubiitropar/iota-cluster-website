@@ -148,6 +148,41 @@
   border-bottom-left-radius: 2px;
 }
 
+.message :global(p) {
+  margin: 0 0 0.5rem 0;
+}
+.message :global(p:last-child) {
+  margin-bottom: 0;
+}
+.message :global(a) {
+  color: var(--accent-cyan);
+  text-decoration: underline;
+}
+.message :global(pre) {
+  background: rgba(0,0,0,0.3);
+  padding: 0.5rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 0.5rem 0;
+}
+.message :global(code) {
+  font-family: monospace;
+  background: rgba(0,0,0,0.2);
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+}
+.message :global(pre) :global(code) {
+  background: transparent;
+  padding: 0;
+}
+.message :global(ul), .message :global(ol) {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+.message :global(li) {
+  margin-bottom: 0.25rem;
+}
+
 .statusIndicator {
   font-size: 0.8rem;
   color: var(--accent-cyan);
