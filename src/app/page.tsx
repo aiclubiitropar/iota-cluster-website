@@ -1,7 +1,13 @@
 import Link from "next/link";
 import styles from "./page.module.css";
+import { getProjects } from "@/actions/projects";
 
-export default function Home() {
+export const dynamic = 'force-dynamic';
+
+export default async function Home() {
+  const projects = await getProjects();
+  const recentProjects = projects.slice(0, 3);
+
   return (
     <div className={styles.container}>
       <div className={`glass-panel ${styles.hero}`}>
@@ -41,6 +47,37 @@ export default function Home() {
           <p className={styles.featureDesc}>Leading technical projects in surveillance, generative models, and more.</p>
         </div>
       </div>
+
+      {recentProjects.length > 0 && (
+        <div className={styles.projectsSection}>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>
+              Recent <span className="text-gradient">Projects</span>
+            </h2>
+            <Link href="/projects" className={styles.viewAllLink}>
+              View All &rarr;
+            </Link>
+          </div>
+          
+          <div className={styles.projectsGrid}>
+            {recentProjects.map(project => (
+              <div key={project.id} className={`glass-panel ${styles.projectCard}`}>
+                <h3 className={styles.projectTitle}>{project.title}</h3>
+                <p className={styles.projectDesc}>
+                  {project.description.length > 100 
+                    ? project.description.substring(0, 100) + "..." 
+                    : project.description}
+                </p>
+                <div className={styles.projectTags}>
+                  {project.tags.split(',').slice(0, 3).map(tag => (
+                    <span key={tag} className={styles.projectTag}>{tag.trim()}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
