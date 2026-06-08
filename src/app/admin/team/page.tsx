@@ -87,8 +87,8 @@ export default async function AdminTeamPage({ searchParams }: { searchParams: Pr
         <form action={addMember} className={styles.form}>
           <div className={`${styles.inputGrid} ${styles.inputGrid3}`}>
             <input type="text" name="name" placeholder="Full Name *" required className={styles.input} />
-            <select name="position" required className={styles.input} style={{ appearance: 'auto' }}>
-              <option value="" disabled selected>Select Position *</option>
+            <select name="position" defaultValue="" required className={styles.input} style={{ appearance: 'auto' }}>
+              <option value="" disabled>Select Position *</option>
               <option value="Secretary">Secretary</option>
               <option value="Representative">Representative</option>
               <option value="Mentors">Mentors</option>
