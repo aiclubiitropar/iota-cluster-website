@@ -127,6 +127,9 @@
   font-weight: 600;
   color: var(--text-primary);
   transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .link:hover {
