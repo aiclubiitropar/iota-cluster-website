@@ -1,9 +1,10 @@
-import { getGalleryImages, createGalleryImages, reorderGalleryImage, updateGalleryImage } from "@/actions/gallery";
+import { getGalleryImages, createGalleryImages, reorderGalleryImage, updateGalleryImage, deleteGalleryImage } from "@/actions/gallery";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import styles from "../admin.module.css";
 import SubmitButton from "@/components/SubmitButton";
+import DeleteButton from "@/components/DeleteButton";
 import ClientAddGalleryForm from "./ClientAddGalleryForm";
 
 export const dynamic = 'force-dynamic';
@@ -44,6 +45,13 @@ export default async function AdminGalleryPage({ searchParams }: { searchParams:
     }
   }
 
+  async function deleteImage(formData: FormData) {
+    "use server";
+    const id = formData.get("id") as string;
+    await deleteGalleryImage(id);
+    redirect("/admin/gallery");
+  }
+
   async function moveUp(id: string) {
     "use server";
     await reorderGalleryImage(id, "up");
@@ -77,6 +85,15 @@ export default async function AdminGalleryPage({ searchParams }: { searchParams:
               if (img.id === editId) {
                 return (
                   <div key={img.id} className="border border-[var(--glass-border)] rounded-md overflow-hidden bg-[var(--glass-bg)] relative flex flex-col justify-between" style={{ padding: '1rem', minHeight: '300px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+                      <img src={img.imageUrl} alt="Preview" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '4px' }} />
+                      <span style={{ fontWeight: 'bold', color: 'var(--text-primary)', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{img.title || "No Title"}</span>
+                      
+                      <form action={deleteImage} style={{ marginLeft: 'auto' }}>
+                        <input type="hidden" name="id" value={img.id} />
+                        <DeleteButton />
+                      </form>
+                    </div>
                     <form action={updateImageAction} className={styles.form} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', height: '100%' }}>
                       <input type="hidden" name="id" value={img.id} />
                       <input type="text" name="title" defaultValue={img.title || ""} placeholder="Image Title / Caption (Optional)" className={styles.input} />
