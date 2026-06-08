@@ -1,5 +1,6 @@
 import { getTeamMembers, createTeamMember } from "@/actions/team";
 import { revalidatePath } from "next/cache";
+import styles from "../admin.module.css";
 
 export default async function AdminTeamPage() {
   const members = await getTeamMembers();
@@ -19,37 +20,37 @@ export default async function AdminTeamPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold font-outfit mb-6">Manage Team</h1>
+      <h1 className={styles.pageTitle}>Manage Team</h1>
       
-      <div className="glass-panel p-6 mb-8">
-        <h2 className="text-lg font-bold mb-4">Add New Member</h2>
-        <form action={addMember} className="flex flex-col gap-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input type="text" name="name" placeholder="Full Name *" required className="p-2 rounded bg-[var(--bg-primary)] border border-[var(--glass-border)] text-white" />
-            <input type="text" name="position" placeholder="Position *" required className="p-2 rounded bg-[var(--bg-primary)] border border-[var(--glass-border)] text-white" />
-            <input type="url" name="imageUrl" placeholder="Image URL (Optional)" className="p-2 rounded bg-[var(--bg-primary)] border border-[var(--glass-border)] text-white" />
-            <input type="url" name="linkedinUrl" placeholder="LinkedIn URL (Optional)" className="p-2 rounded bg-[var(--bg-primary)] border border-[var(--glass-border)] text-white" />
-            <input type="url" name="githubUrl" placeholder="GitHub URL (Optional)" className="p-2 rounded bg-[var(--bg-primary)] border border-[var(--glass-border)] text-white" />
+      <div className={`glass-panel ${styles.formSection}`}>
+        <h2 className={styles.sectionTitle}>Add New Member</h2>
+        <form action={addMember} className={styles.form}>
+          <div className={`${styles.inputGrid} ${styles.inputGrid2}`}>
+            <input type="text" name="name" placeholder="Full Name *" required className={styles.input} />
+            <input type="text" name="position" placeholder="Position *" required className={styles.input} />
+            <input type="url" name="imageUrl" placeholder="Image URL (Optional)" className={styles.input} />
+            <input type="url" name="linkedinUrl" placeholder="LinkedIn URL (Optional)" className={styles.input} />
+            <input type="url" name="githubUrl" placeholder="GitHub URL (Optional)" className={styles.input} />
           </div>
-          <button type="submit" className="btn-primary mt-2 self-start">Add Member</button>
+          <button type="submit" className={`btn-primary ${styles.submitBtn}`}>Add Member</button>
         </form>
       </div>
 
       <div className="glass-panel p-6">
-        <h2 className="text-lg font-bold mb-4">Current Members</h2>
+        <h2 className={styles.sectionTitle}>Current Members</h2>
         {members.length === 0 ? (
           <p className="text-[var(--text-secondary)]">No members added yet.</p>
         ) : (
-          <ul className="divide-y divide-[var(--glass-border)]">
+          <div className={styles.list}>
             {members.map(m => (
-              <li key={m.id} className="py-3 flex justify-between items-center">
+              <div key={m.id} className={styles.listItem}>
                 <div>
-                  <p className="font-bold">{m.name}</p>
-                  <p className="text-sm text-[var(--accent-cyan)]">{m.position}</p>
+                  <p className={styles.itemTitle}>{m.name}</p>
+                  <p className={styles.itemSubtitle}>{m.position}</p>
                 </div>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         )}
       </div>
     </div>

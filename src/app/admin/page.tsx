@@ -1,22 +1,25 @@
+import Link from "next/link";
+import styles from "./admin.module.css";
+
 export default function AdminPage() {
   return (
     <div>
-      <h1 className="text-3xl font-bold font-outfit mb-4">Admin Dashboard</h1>
-      <p className="text-[var(--text-secondary)] mb-8">
+      <h1 className={styles.pageTitle}>Admin Dashboard</h1>
+      <p className={styles.pageSubtitle}>
         Welcome to the Iota Cluster Admin Control Panel. Select an option from the sidebar to manage your website content.
       </p>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="glass-panel p-6 border-l-4 border-l-[var(--accent-cyan)]">
-          <h2 className="text-xl font-bold mb-2">Team Management</h2>
-          <p className="text-[var(--text-secondary)] mb-4">Add, edit, or remove club members.</p>
-          <a href="/admin/team" className="text-[var(--accent-cyan)] font-medium hover:underline">Manage Team &rarr;</a>
+      <div className={styles.grid}>
+        <div className={`glass-panel ${styles.card}`}>
+          <h2 className={styles.cardTitle}>Team Management</h2>
+          <p className={styles.cardDesc}>Add, edit, or remove club members.</p>
+          <Link href="/admin/team" className={styles.cardLink}>Manage Team &rarr;</Link>
         </div>
         
-        <div className="glass-panel p-6 border-l-4 border-l-[var(--accent-purple)]">
-          <h2 className="text-xl font-bold mb-2">Projects Showcase</h2>
-          <p className="text-[var(--text-secondary)] mb-4">Upload new technical projects or hackathon submissions.</p>
-          <a href="/admin/projects" className="text-[var(--accent-cyan)] font-medium hover:underline">Manage Projects &rarr;</a>
+        <div className={`glass-panel ${styles.card}`} style={{ borderLeftColor: 'var(--accent-purple)' }}>
+          <h2 className={styles.cardTitle}>Projects Showcase</h2>
+          <p className={styles.cardDesc}>Upload new technical projects or hackathon submissions.</p>
+          <Link href="/admin/projects" className={styles.cardLink}>Manage Projects &rarr;</Link>
         </div>
       </div>
     </div>

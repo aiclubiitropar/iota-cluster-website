@@ -41,14 +41,14 @@
 }
 
 .navLinks {
-  display: none;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 }
 
 @media (min-width: 768px) {
   .navLinks {
-    display: flex;
     gap: 2rem;
-    align-items: center;
   }
 }
 
