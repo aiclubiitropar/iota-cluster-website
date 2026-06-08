@@ -6,7 +6,7 @@ import styles from "../admin.module.css";
 
 export const dynamic = 'force-dynamic';
 
-export default async function AdminTeamPage({ searchParams }: { searchParams: Promise<{ edit?: string }> }) {
+export default async function AdminTeamPage({ searchParams }: { searchParams: Promise<{ edit?: string; error?: string }> }) {
   const params = await searchParams;
   const editId = params?.edit;
   const members = await getTeamMembers();
