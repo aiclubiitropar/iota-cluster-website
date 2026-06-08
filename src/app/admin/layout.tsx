@@ -20,11 +20,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               Manage Team
             </Link>
           )}
-          {!isMember && (
-            <Link href="/admin/projects" className={styles.navLink}>
-              Manage Projects
-            </Link>
-          )}
+          <Link href="/admin/projects" className={styles.navLink}>
+            Manage Projects
+          </Link>
           {!isMember && (
             <Link href="/admin/gallery" className={styles.navLink}>
               Manage Gallery

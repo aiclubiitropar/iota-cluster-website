@@ -23,13 +23,11 @@ export default async function AdminPage() {
           </div>
         )}
         
-        {!isMember && (
-          <div className={`glass-panel ${styles.card}`} style={{ borderLeftColor: 'var(--accent-purple)' }}>
-            <h2 className={styles.cardTitle}>Projects Showcase</h2>
-            <p className={styles.cardDesc}>Upload new technical projects or hackathon submissions.</p>
-            <Link href="/admin/projects" className={styles.cardLink}>Manage Projects &rarr;</Link>
-          </div>
-        )}
+        <div className={`glass-panel ${styles.card}`} style={{ borderLeftColor: 'var(--accent-purple)' }}>
+          <h2 className={styles.cardTitle}>Projects Showcase</h2>
+          <p className={styles.cardDesc}>Upload new technical projects or hackathon submissions.</p>
+          <Link href="/admin/projects" className={styles.cardLink}>Manage Projects &rarr;</Link>
+        </div>
 
         {!isMember && (
           <div className={`glass-panel ${styles.card}`} style={{ borderLeftColor: 'var(--accent-pink, #EC4899)' }}>
