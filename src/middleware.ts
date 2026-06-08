@@ -42,5 +42,13 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: '/admin/:path*',
+  matcher: [
+    {
+      source: '/admin/:path*',
+      missing: [
+        { type: 'header', key: 'next-action' },
+        { type: 'header', key: 'next-router-prefetch' },
+      ],
+    },
+  ],
 };
