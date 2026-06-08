@@ -83,10 +83,14 @@ export default async function AdminGalleryPage({ searchParams }: { searchParams:
           <div className={styles.grid}>
             {images.map((img, i) => {
               if (img.id === editId) {
+                const optimizedUrl = img.imageUrl.includes('supabase.co') && img.imageUrl.includes('/object/public/')
+                  ? img.imageUrl.replace('/object/public/', '/render/image/public/') + '?width=120&height=120&resize=cover'
+                  : img.imageUrl;
+
                 return (
                   <div key={img.id} className="border border-[var(--glass-border)] rounded-md overflow-hidden bg-[var(--glass-bg)] relative flex flex-col justify-between" style={{ padding: '1rem', minHeight: '300px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                      <img src={img.imageUrl} alt="Preview" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '4px' }} />
+                      <img src={optimizedUrl} alt="Preview" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '4px' }} loading="lazy" />
                       <span style={{ fontWeight: 'bold', color: 'var(--text-primary)', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{img.title || "No Title"}</span>
                       
                       <form action={deleteImage} style={{ marginLeft: 'auto' }}>
@@ -108,11 +112,17 @@ export default async function AdminGalleryPage({ searchParams }: { searchParams:
                 );
               }
 
+              const optimizedUrl = img.imageUrl.includes('supabase.co') && img.imageUrl.includes('/object/public/')
+                ? img.imageUrl.replace('/object/public/', '/render/image/public/') + '?width=400&height=400&resize=cover'
+                : img.imageUrl;
+
               return (
-                <div key={img.id} className="border border-[var(--glass-border)] rounded-md overflow-hidden bg-[var(--glass-bg)] relative group">
-                  <img src={img.imageUrl} alt={img.title || "Gallery Image"} className="w-full h-48 object-cover" />
-                  <div className="p-3">
-                    <p className="font-bold">{img.title}</p>
+                <div key={img.id} className="border border-[var(--glass-border)] rounded-md overflow-hidden bg-[var(--glass-bg)] relative group" style={{ display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ height: '200px', width: '100%', overflow: 'hidden' }}>
+                    <img src={optimizedUrl} alt={img.title || "Gallery Image"} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
+                  </div>
+                  <div className="p-3" style={{ padding: '1rem' }}>
+                    <p className="font-bold" style={{ fontWeight: 'bold', color: 'var(--text-primary)', margin: 0 }}>{img.title}</p>
                   </div>
                   
                   <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition">
