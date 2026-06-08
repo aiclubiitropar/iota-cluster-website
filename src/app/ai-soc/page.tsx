@@ -25,6 +25,47 @@ export default async function AISocPage() {
 
       <div style={{ marginTop: '3rem', marginBottom: '1rem' }}>
         <h2 className={projectStyles.title} style={{ fontSize: '2rem' }}>
+          Our <span className="text-gradient">Contributors</span>
+        </h2>
+      </div>
+
+      {aiSocContributors.length === 0 ? (
+        <div className={`glass-panel ${projectStyles.emptyState}`}>
+          <p className="text-[var(--text-secondary)]">Contributors are currently being updated. Check back soon!</p>
+        </div>
+      ) : (
+        <div className={teamStyles.grid}>
+          {aiSocContributors.map((member) => (
+            <div key={member.id} className={`glass-panel ${teamStyles.card}`}>
+              <div className={teamStyles.imageContainer}>
+                <img
+                  src={member.imageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=0D0D17&color=8cf6eb`}
+                  alt={member.name}
+                  className={teamStyles.image}
+                />
+              </div>
+              <h3 className={teamStyles.name}>{member.name}</h3>
+              <p className={teamStyles.position}>{member.position}</p>
+              
+              <div className={teamStyles.links}>
+                {member.githubUrl && (
+                  <a href={member.githubUrl} target="_blank" rel="noopener noreferrer" className={teamStyles.link}>
+                    GitHub
+                  </a>
+                )}
+                {member.linkedinUrl && (
+                  <a href={member.linkedinUrl} target="_blank" rel="noopener noreferrer" className={teamStyles.link}>
+                    LinkedIn
+                  </a>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div style={{ marginTop: '4rem', marginBottom: '1rem' }}>
+        <h2 className={projectStyles.title} style={{ fontSize: '2rem' }}>
           Projects <span className="text-gradient">under AI soc</span>
         </h2>
       </div>
@@ -76,47 +117,6 @@ export default async function AISocPage() {
                     </a>
                   )}
                 </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      <div style={{ marginTop: '4rem', marginBottom: '1rem' }}>
-        <h2 className={projectStyles.title} style={{ fontSize: '2rem' }}>
-          Our <span className="text-gradient">Contributors</span>
-        </h2>
-      </div>
-
-      {aiSocContributors.length === 0 ? (
-        <div className={`glass-panel ${projectStyles.emptyState}`}>
-          <p className="text-[var(--text-secondary)]">Contributors are currently being updated. Check back soon!</p>
-        </div>
-      ) : (
-        <div className={teamStyles.grid}>
-          {aiSocContributors.map((member) => (
-            <div key={member.id} className={`glass-panel ${teamStyles.card}`}>
-              <div className={teamStyles.imageContainer}>
-                <img
-                  src={member.imageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=0D0D17&color=8cf6eb`}
-                  alt={member.name}
-                  className={teamStyles.image}
-                />
-              </div>
-              <h3 className={teamStyles.name}>{member.name}</h3>
-              <p className={teamStyles.position}>{member.position}</p>
-              
-              <div className={teamStyles.links}>
-                {member.githubUrl && (
-                  <a href={member.githubUrl} target="_blank" rel="noopener noreferrer" className={teamStyles.link}>
-                    GitHub
-                  </a>
-                )}
-                {member.linkedinUrl && (
-                  <a href={member.linkedinUrl} target="_blank" rel="noopener noreferrer" className={teamStyles.link}>
-                    LinkedIn
-                  </a>
-                )}
               </div>
             </div>
           ))}
