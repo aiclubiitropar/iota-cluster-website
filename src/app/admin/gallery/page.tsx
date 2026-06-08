@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import styles from "../admin.module.css";
 import SubmitButton from "@/components/SubmitButton";
+import ClientAddGalleryForm from "./ClientAddGalleryForm";
 
 export const dynamic = 'force-dynamic';
 
@@ -64,19 +65,7 @@ export default async function AdminGalleryPage({ searchParams }: { searchParams:
         </div>
       )}
 
-      <div className={`glass-panel ${styles.formSection}`}>
-        <h2 className={styles.sectionTitle}>Add New Image</h2>
-        <form action={addImage} className={styles.form}>
-          <div className={`${styles.inputGrid} ${styles.inputGrid2}`}>
-            <input type="text" name="title" placeholder="Image Title / Caption (Optional)" className={styles.input} />
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <input type="url" name="imageUrl" placeholder="Image URL (Or upload below)" className={styles.input} />
-              <input type="file" name="imageFiles" accept="image/*" multiple className={styles.input} style={{ padding: '0.4rem' }} />
-            </div>
-          </div>
-          <SubmitButton defaultText="Add Image" loadingText="Adding Image..." className={`btn-primary ${styles.submitBtn}`} />
-        </form>
-      </div>
+      <ClientAddGalleryForm />
 
       <div className="glass-panel p-6">
         <h2 className={styles.sectionTitle}>Current Gallery Images</h2>
