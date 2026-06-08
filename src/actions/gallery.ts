@@ -34,26 +34,41 @@ export async function reorderGalleryImage(id: string, direction: "up" | "down") 
 
 import { uploadImageToStorage } from "@/lib/supabase";
 
-export async function createGalleryImage(data: { title: string; imageUrl?: string; imageFile?: File }) {
+export async function createGalleryImages(data: { title: string; imageUrl?: string; imageFiles?: File[] }) {
   try {
-    let finalUrl = data.imageUrl || "";
+    const createdImages = [];
 
-    if (data.imageFile && data.imageFile.size > 0) {
-      const uploadUrl = await uploadImageToStorage(data.imageFile);
-      if (uploadUrl) finalUrl = uploadUrl;
+    // If an image URL is provided, create one entry
+    if (data.imageUrl && data.imageUrl.trim() !== "") {
+      const img = await prisma.galleryImage.create({ data: { title: data.title, imageUrl: data.imageUrl } });
+      createdImages.push(img);
     }
 
-    if (!finalUrl) {
+    // If files are provided, upload each and create an entry
+    if (data.imageFiles && data.imageFiles.length > 0) {
+      for (const file of data.imageFiles) {
+        if (file.size > 0) {
+          const uploadUrl = await uploadImageToStorage(file);
+          if (uploadUrl) {
+            // Optional: use filename if multiple files, or just the same title
+            const imgTitle = data.imageFiles.length > 1 && data.title ? `${data.title} - ${file.name}` : data.title || file.name;
+            const img = await prisma.galleryImage.create({ data: { title: imgTitle, imageUrl: uploadUrl } });
+            createdImages.push(img);
+          }
+        }
+      }
+    }
+
+    if (createdImages.length === 0) {
       return { success: false, error: "Image URL or File is required" };
     }
 
-    const img = await prisma.galleryImage.create({ data: { title: data.title, imageUrl: finalUrl } });
     revalidatePath("/admin/gallery");
     revalidatePath("/");
-    return { success: true, img };
+    return { success: true, count: createdImages.length };
   } catch (error) {
-    console.error("Failed to create gallery image:", error);
-    return { success: false, error: "Failed to create gallery image" };
+    console.error("Failed to create gallery images:", error);
+    return { success: false, error: "Failed to create gallery images" };
   }
 }
 

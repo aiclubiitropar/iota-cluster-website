@@ -1,4 +1,4 @@
-import { getGalleryImages, createGalleryImage, reorderGalleryImage, updateGalleryImage } from "@/actions/gallery";
+import { getGalleryImages, createGalleryImages, reorderGalleryImage, updateGalleryImage } from "@/actions/gallery";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -14,10 +14,10 @@ export default async function AdminGalleryPage({ searchParams }: { searchParams:
 
   async function addImage(formData: FormData) {
     "use server";
-    await createGalleryImage({
+    await createGalleryImages({
       title: formData.get("title") as string,
       imageUrl: formData.get("imageUrl") as string | undefined,
-      imageFile: formData.get("imageFile") as File | undefined,
+      imageFiles: formData.getAll("imageFiles") as File[],
     });
     revalidatePath("/admin/gallery");
     revalidatePath("/");
@@ -70,7 +70,7 @@ export default async function AdminGalleryPage({ searchParams }: { searchParams:
             <input type="text" name="title" placeholder="Image Title / Caption *" required className={styles.input} />
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <input type="url" name="imageUrl" placeholder="Image URL (Or upload below)" className={styles.input} />
-              <input type="file" name="imageFile" accept="image/*" className={styles.input} style={{ padding: '0.4rem' }} />
+              <input type="file" name="imageFiles" accept="image/*" multiple className={styles.input} style={{ padding: '0.4rem' }} />
             </div>
           </div>
           <button type="submit" className={`btn-primary ${styles.submitBtn}`}>Add Image</button>
