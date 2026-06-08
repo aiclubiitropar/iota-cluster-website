@@ -49,7 +49,7 @@ export async function loginAdmin(formData: FormData) {
   }
 
   const token = await createToken(member.position);
-  cookies().set("admin_token", token, {
+  (await cookies()).set("admin_token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     maxAge: 60 * 60 * 24 * 7,
@@ -60,6 +60,6 @@ export async function loginAdmin(formData: FormData) {
 }
 
 export async function logoutAdmin() {
-  cookies().delete("admin_token");
+  (await cookies()).delete("admin_token");
   redirect("/");
 }
