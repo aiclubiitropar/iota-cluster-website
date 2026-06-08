@@ -17,7 +17,8 @@ const nextConfig: NextConfig = {
         hostname: "ui-avatars.com",
       }
     ]
-  }
+  },
+  transpilePackages: ["lodash-es", "quill", "react-quill-new"]
 };
 
 export default nextConfig;

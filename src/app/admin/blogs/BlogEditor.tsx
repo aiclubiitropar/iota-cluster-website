@@ -2,7 +2,7 @@
 
 import { useState, useRef, useMemo } from "react";
 import dynamic from "next/dynamic";
-import "react-quill/dist/quill.snow.css";
+import "react-quill-new/dist/quill.snow.css";
 import SubmitButton from "@/components/SubmitButton";
 import { createBlog, updateBlog } from "@/actions/blogs";
 import { useRouter } from "next/navigation";
