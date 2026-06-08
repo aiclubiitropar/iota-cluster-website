@@ -68,3 +68,17 @@
   padding-top: 6rem;
   min-height: 100vh;
 }
+
+.aiSocNav {
+  border: 1px solid rgba(255, 215, 0, 0.5); /* Thinner, softer yellow border */
+  border-radius: 9999px !important; /* Capsule shape */
+  padding: 0.3rem 0.8rem !important; /* Snug fit for the capsule */
+  color: rgba(255, 215, 0, 0.9);
+  transition: all 0.3s ease;
+}
+
+.aiSocNav:hover {
+  color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 8px rgba(140, 246, 235, 0.3);
+}
