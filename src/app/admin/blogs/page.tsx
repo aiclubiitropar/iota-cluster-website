@@ -1,4 +1,5 @@
-import { getBlogs, deleteBlog } from "@/actions/blogs";
+import { deleteBlog } from "@/actions/blogs";
+import prisma from "@/lib/prisma";
 import Link from "next/link";
 import styles from "../admin.module.css";
 import BlogEditor from "./BlogEditor";
@@ -11,7 +12,7 @@ export default async function AdminBlogsPage({ searchParams }: { searchParams: P
   const isNew = params?.new === "true";
   const editId = params?.edit;
 
-  const blogs = await getBlogs();
+  const blogs = await prisma.blog.findMany({ orderBy: { createdAt: "desc" } });
   const editBlog = editId ? blogs.find(b => b.id === editId) : null;
 
   async function handleDelete(formData: FormData) {

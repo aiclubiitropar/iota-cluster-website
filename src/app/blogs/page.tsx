@@ -1,11 +1,11 @@
 import styles from "../projects/page.module.css";
-import { getBlogs } from "@/actions/blogs";
+import prisma from "@/lib/prisma";
 import Link from "next/link";
 
 export const dynamic = 'force-dynamic';
 
 export default async function BlogsPage() {
-  const blogs = await getBlogs();
+  const blogs = await prisma.blog.findMany({ orderBy: { createdAt: "desc" } });
 
   return (
     <div className={styles.container}>

@@ -1,4 +1,4 @@
-import { getBlogById } from "@/actions/blogs";
+import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import styles from "./page.module.css";
@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function BlogPostPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const blog = await getBlogById(id);
+  const blog = await prisma.blog.findUnique({ where: { id } });
 
   if (!blog) {
     notFound();
