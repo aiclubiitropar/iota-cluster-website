@@ -1,0 +1,78 @@
+.quill-dark {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  color: var(--text-primary, #ffffff);
+}
+
+.quill-dark .ql-toolbar.ql-snow {
+  border: none;
+  border-bottom: 1px solid var(--glass-border);
+  background: rgba(30, 30, 40, 0.4);
+}
+
+.quill-dark .ql-container.ql-snow {
+  border: none;
+  background: transparent;
+  min-height: 400px;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+/* Icons styling */
+.quill-dark .ql-snow .ql-stroke {
+  stroke: rgba(255, 255, 255, 0.8);
+}
+
+.quill-dark .ql-snow .ql-fill, 
+.quill-dark .ql-snow .ql-stroke.ql-fill {
+  fill: rgba(255, 255, 255, 0.8);
+}
+
+.quill-dark .ql-snow .ql-picker {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Picker dropdown menus */
+.quill-dark .ql-snow .ql-picker-options {
+  background: var(--bg-card, #1e1e28);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.quill-dark .ql-snow .ql-picker-item:hover,
+.quill-dark .ql-snow .ql-picker-item.ql-selected {
+  color: var(--accent-cyan);
+}
+
+/* Active states */
+.quill-dark .ql-snow .ql-active {
+  color: var(--accent-purple) !important;
+}
+
+.quill-dark .ql-snow .ql-active .ql-stroke {
+  stroke: var(--accent-purple) !important;
+}
+
+.quill-dark .ql-snow .ql-active .ql-fill {
+  fill: var(--accent-purple) !important;
+}
+
+/* Tooltip (link editor) */
+.quill-dark .ql-snow .ql-tooltip {
+  background: var(--bg-card, #1e1e28);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  color: var(--text-primary);
+}
+
+.quill-dark .ql-snow .ql-tooltip input[type=text] {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+}
+
+.quill-dark .ql-snow .ql-tooltip a {
+  color: var(--accent-cyan);
+}

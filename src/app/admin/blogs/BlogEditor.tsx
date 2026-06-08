@@ -3,6 +3,7 @@
 import { useState, useRef, useMemo } from "react";
 import dynamic from "next/dynamic";
 import "react-quill-new/dist/quill.snow.css";
+import "./quill-dark.css";
 import SubmitButton from "@/components/SubmitButton";
 import { createBlog, updateBlog } from "@/actions/blogs";
 import { useRouter } from "next/navigation";
@@ -91,13 +92,12 @@ export default function BlogEditor({
         <input type="file" accept="image/*" onChange={e => setImageFile(e.target.files?.[0] || null)} style={{ color: 'white' }} />
       </div>
 
-      <div style={{ background: 'white', color: 'black', borderRadius: '8px', overflow: 'hidden' }}>
+      <div className="quill-dark">
         <ReactQuill 
           theme="snow" 
           value={content} 
           onChange={setContent} 
           modules={modules}
-          style={{ minHeight: '400px' }}
         />
       </div>
 
