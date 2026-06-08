@@ -1,81 +1,123 @@
 .container {
-  max-width: 700px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 4rem 1rem;
 }
 
 .title {
   text-align: center;
   font-family: var(--font-outfit);
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 3rem;
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 5rem;
+  letter-spacing: -0.02em;
 }
 
 .roadmap {
   position: relative;
-  margin-left: 10px;
+  width: 100%;
 }
 
-/* The glowing line */
+/* Center glowing line */
 .roadmap::before {
   content: '';
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: 4px;
-  background: linear-gradient(180deg, var(--accent-purple), var(--accent-cyan));
+  background: linear-gradient(180deg, var(--accent-cyan) 0%, var(--accent-purple) 50%, var(--accent-cyan) 100%);
   border-radius: 4px;
-  box-shadow: 0 0 15px var(--accent-purple);
+  box-shadow: 0 0 20px var(--accent-cyan);
 }
 
-.node {
+.nodeWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 4rem;
   position: relative;
-  margin-left: 40px;
-  margin-bottom: 2rem;
-  padding: 1.5rem;
-  border: 1px solid var(--glass-border);
-  background: var(--glass-bg);
-  border-radius: 12px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.node:hover {
-  transform: translateX(10px);
-  box-shadow: 0 8px 32px rgba(139, 92, 246, 0.2);
-  border-color: rgba(139, 92, 246, 0.4);
+.wrapperLeft {
+  flex-direction: row-reverse;
 }
 
-/* The node dot */
-.node::before {
-  content: '';
+.wrapperRight {
+  flex-direction: row;
+}
+
+.nodeMarker {
   position: absolute;
-  top: 24px;
-  left: -46px;
-  width: 16px;
-  height: 16px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: var(--bg-primary);
   border: 4px solid var(--accent-cyan);
-  box-shadow: 0 0 10px var(--accent-cyan);
-  z-index: 1;
+  box-shadow: 0 0 15px var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-outfit);
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.nodeMarker:hover {
+  box-shadow: 0 0 25px var(--accent-cyan), inset 0 0 10px var(--accent-cyan);
+  transform: translate(-50%, -50%) scale(1.1);
+  background: rgba(6, 182, 212, 0.1);
+}
+
+.nodeContent {
+  width: calc(50% - 40px);
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.wrapperLeft .nodeContent {
+  text-align: right;
+}
+
+.wrapperRight .nodeContent {
+  text-align: left;
+}
+
+.nodeContent:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 240, 255, 0.15);
+  border-color: rgba(0, 240, 255, 0.3);
 }
 
 .nodeTitle {
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-size: 1.75rem;
+  font-weight: 700;
   margin-bottom: 1rem;
-  color: var(--text-primary);
+  background: linear-gradient(90deg, #fff, #e2e8f0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-family: var(--font-outfit);
 }
 
 .nodeDesc {
   color: var(--text-secondary);
-  line-height: 1.6;
+  line-height: 1.7;
   margin-bottom: 1.5rem;
+  font-size: 1.05rem;
 }
 
 .mediaContainer {
@@ -84,13 +126,29 @@
   gap: 1.5rem;
 }
 
+/* Right align media on the left side */
+.wrapperLeft .mediaContainer {
+  align-items: flex-end;
+}
+.wrapperRight .mediaContainer {
+  align-items: flex-start;
+}
+
 .videoWrapper {
   position: relative;
+  width: 100%;
   padding-bottom: 56.25%; /* 16:9 aspect ratio */
   height: 0;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
-  border: 1px solid var(--glass-border);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.videoWrapper:hover {
+  transform: scale(1.02);
+  border-color: var(--accent-cyan);
 }
 
 .videoWrapper iframe {
@@ -107,27 +165,79 @@
   gap: 0.75rem;
 }
 
+.wrapperLeft .filesList {
+  justify-content: flex-end;
+}
+
+.wrapperRight .filesList {
+  justify-content: flex-start;
+}
+
 .filePill {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: rgba(6, 182, 212, 0.1);
-  border: 1px solid rgba(6, 182, 212, 0.3);
+  padding: 0.6rem 1.2rem;
+  background: rgba(251, 191, 36, 0.1); /* Match cyan accent */
+  border: 1px solid rgba(251, 191, 36, 0.3);
   border-radius: 9999px;
   color: var(--accent-cyan);
-  font-size: 0.875rem;
+  font-size: 0.9rem;
+  font-weight: 500;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .filePill:hover {
-  background: rgba(6, 182, 212, 0.2);
+  background: var(--accent-cyan);
+  color: var(--bg-primary);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.15);
+  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
 }
 
 .fileIcon {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .roadmap::before {
+    left: 20px;
+    transform: none;
+  }
+
+  .nodeWrapper {
+    flex-direction: row; /* Force left to right */
+    justify-content: flex-start;
+    padding-left: 60px;
+  }
+
+  .wrapperLeft {
+    flex-direction: row;
+  }
+
+  .nodeMarker {
+    left: 20px;
+    transform: translate(-50%, -50%);
+  }
+  
+  .nodeMarker:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  .nodeContent {
+    width: 100%;
+    text-align: left !important;
+  }
+
+  .wrapperLeft .mediaContainer,
+  .wrapperRight .mediaContainer {
+    align-items: flex-start;
+  }
+
+  .wrapperLeft .filesList,
+  .wrapperRight .filesList {
+    justify-content: flex-start;
+  }
 }
