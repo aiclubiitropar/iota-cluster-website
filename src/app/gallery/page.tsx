@@ -25,10 +25,12 @@ export default async function GalleryPage() {
         <div className={styles.grid}>
           {images.map((img) => (
             <div key={img.id} className={`glass-panel ${styles.card}`}>
-              <img src={img.imageUrl} alt={img.title} className={styles.image} />
-              <div className={styles.overlay}>
-                <p className={styles.imageTitle}>{img.title}</p>
-              </div>
+              <img src={img.imageUrl} alt={img.title || "Gallery Image"} className={styles.image} />
+              {img.title && (
+                <div className={styles.overlay}>
+                  <p className={styles.imageTitle}>{img.title}</p>
+                </div>
+              )}
             </div>
           ))}
         </div>

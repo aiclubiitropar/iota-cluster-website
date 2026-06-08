@@ -45,7 +45,7 @@ model Handle {
 
 model GalleryImage {
   id           String   @id @default(uuid())
-  title        String
+  title        String?
   imageUrl     String
   order        Int      @default(0)
   createdAt    DateTime @default(now())

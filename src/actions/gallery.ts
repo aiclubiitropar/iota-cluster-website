@@ -34,13 +34,13 @@ export async function reorderGalleryImage(id: string, direction: "up" | "down") 
 
 import { uploadImageToStorage } from "@/lib/supabase";
 
-export async function createGalleryImages(data: { title: string; imageUrl?: string; imageFiles?: File[] }) {
+export async function createGalleryImages(data: { title?: string; imageUrl?: string; imageFiles?: File[] }) {
   try {
     const createdImages = [];
 
     // If an image URL is provided, create one entry
     if (data.imageUrl && data.imageUrl.trim() !== "") {
-      const img = await prisma.galleryImage.create({ data: { title: data.title, imageUrl: data.imageUrl } });
+      const img = await prisma.galleryImage.create({ data: { title: data.title || null, imageUrl: data.imageUrl } });
       createdImages.push(img);
     }
 
@@ -51,7 +51,7 @@ export async function createGalleryImages(data: { title: string; imageUrl?: stri
           const uploadUrl = await uploadImageToStorage(file);
           if (uploadUrl) {
             // Optional: use filename if multiple files, or just the same title
-            const imgTitle = data.imageFiles.length > 1 && data.title ? `${data.title} - ${file.name}` : data.title || file.name;
+            const imgTitle = data.imageFiles.length > 1 && data.title ? `${data.title} - ${file.name}` : data.title || null;
             const img = await prisma.galleryImage.create({ data: { title: imgTitle, imageUrl: uploadUrl } });
             createdImages.push(img);
           }
@@ -72,7 +72,7 @@ export async function createGalleryImages(data: { title: string; imageUrl?: stri
   }
 }
 
-export async function updateGalleryImage(id: string, data: { title: string; imageUrl?: string; imageFile?: File }) {
+export async function updateGalleryImage(id: string, data: { title?: string; imageUrl?: string; imageFile?: File }) {
   try {
     const existing = await prisma.galleryImage.findUnique({ where: { id } });
     if (!existing) return { success: false, error: "Not found" };
@@ -86,7 +86,7 @@ export async function updateGalleryImage(id: string, data: { title: string; imag
 
     const img = await prisma.galleryImage.update({
       where: { id },
-      data: { title: data.title, imageUrl: finalUrl }
+      data: { title: data.title || null, imageUrl: finalUrl }
     });
     revalidatePath("/admin/gallery");
     revalidatePath("/");

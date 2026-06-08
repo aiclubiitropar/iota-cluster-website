@@ -67,7 +67,7 @@ export default async function AdminGalleryPage({ searchParams }: { searchParams:
         <h2 className={styles.sectionTitle}>Add New Image</h2>
         <form action={addImage} className={styles.form}>
           <div className={`${styles.inputGrid} ${styles.inputGrid2}`}>
-            <input type="text" name="title" placeholder="Image Title / Caption *" required className={styles.input} />
+            <input type="text" name="title" placeholder="Image Title / Caption (Optional)" className={styles.input} />
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <input type="url" name="imageUrl" placeholder="Image URL (Or upload below)" className={styles.input} />
               <input type="file" name="imageFiles" accept="image/*" multiple className={styles.input} style={{ padding: '0.4rem' }} />
@@ -89,7 +89,7 @@ export default async function AdminGalleryPage({ searchParams }: { searchParams:
                   <div key={img.id} className="border border-[var(--glass-border)] rounded-md overflow-hidden bg-[var(--glass-bg)] relative flex flex-col justify-between" style={{ padding: '1rem', minHeight: '300px' }}>
                     <form action={updateImageAction} className={styles.form} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', height: '100%' }}>
                       <input type="hidden" name="id" value={img.id} />
-                      <input type="text" name="title" defaultValue={img.title} placeholder="Image Title / Caption *" required className={styles.input} />
+                      <input type="text" name="title" defaultValue={img.title || ""} placeholder="Image Title / Caption (Optional)" className={styles.input} />
                       <input type="url" name="imageUrl" defaultValue={img.imageUrl} placeholder="Image URL (Or upload below)" className={styles.input} />
                       <input type="file" name="imageFile" accept="image/*" className={styles.input} style={{ padding: '0.4rem' }} />
                       <div style={{ display: 'flex', gap: '0.5rem', marginTop: 'auto' }}>
