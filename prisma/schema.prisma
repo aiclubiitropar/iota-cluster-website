@@ -4,14 +4,12 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
-  directUrl = env("DATABASE_URL")
 }
 
 model TeamMember {
   id           String   @id @default(uuid())
   name         String
-  role         String
+  position     String
   imageUrl     String?
   linkedinUrl  String?
   githubUrl    String?
