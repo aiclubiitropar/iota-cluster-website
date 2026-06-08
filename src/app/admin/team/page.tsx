@@ -13,13 +13,6 @@ export default async function AdminTeamPage({ searchParams }: { searchParams: Pr
 
   async function addMember(formData: FormData) {
     "use server";
-    await createTeamMember({
-      name: formData.get("name") as string,
-      position: formData.get("position") as string,
-      email: formData.get("email") as string,
-      password: formData.get("password") as string,
-      imageUrl: formData.get("imageUrl") as string || undefined,
-      linkedinUrl: formData.get("linkedinUrl") as string || undefined,
     const result = await createTeamMember({
       name: formData.get("name") as string,
       position: formData.get("position") as string,
