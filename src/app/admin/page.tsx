@@ -30,6 +30,14 @@ export default async function AdminPage() {
         </div>
 
         {!isMember && (
+          <div className={`glass-panel ${styles.card}`} style={{ borderLeftColor: 'var(--accent-cyan)' }}>
+            <h2 className={styles.cardTitle}>Resources Roadmap</h2>
+            <p className={styles.cardDesc}>Upload learning materials, links, and YouTube videos for the roadmap.</p>
+            <Link href="/admin/resources" className={styles.cardLink}>Manage Resources &rarr;</Link>
+          </div>
+        )}
+
+        {!isMember && (
           <div className={`glass-panel ${styles.card}`} style={{ borderLeftColor: 'var(--accent-pink, #EC4899)' }}>
             <h2 className={styles.cardTitle}>Gallery Management</h2>
             <p className={styles.cardDesc}>Upload photos of events, hackathons, and sessions.</p>
