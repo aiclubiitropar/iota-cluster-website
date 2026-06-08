@@ -112,9 +112,19 @@ export default function Chatbot() {
         <div className={styles.chatWindow}>
           <div className={styles.chatHeader}>
             <div className="flex items-center gap-2">
+              <img src="/ragnarok.ico" alt="Ragnarok" className={styles.headerIcon} />
               <span className={styles.chatTitle}>Ragnarok AI</span>
             </div>
-            <button onClick={() => setIsOpen(false)} className={styles.closeButton}>&times;</button>
+            <div className="flex items-center gap-3">
+              <a href="https://rag-narok.vercel.app/" target="_blank" rel="noopener noreferrer" className={styles.redirectButton} title="Open Ragnarok Platform">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+              <button onClick={() => setIsOpen(false)} className={styles.closeButton}>&times;</button>
+            </div>
           </div>
           
           <div className={styles.chatBody}>
