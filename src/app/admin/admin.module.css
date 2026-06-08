@@ -4,8 +4,16 @@
   min-height: 80vh;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem 1rem;
-  gap: 2rem;
+  padding: 1rem 0.5rem;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .layoutContainer {
+    flex-direction: row;
+    padding: 2rem 1rem;
+    gap: 2rem;
+  }
 }
 
 @media (min-width: 768px) {

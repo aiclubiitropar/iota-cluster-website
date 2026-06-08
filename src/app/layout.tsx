@@ -4,6 +4,7 @@ import "./globals.css";
 import Link from "next/link";
 import styles from "./layout.module.css";
 import Chatbot from "@/components/Chatbot";
+import Navbar from "@/components/Navbar";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
@@ -21,27 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${outfit.variable}`}>
-        <nav className={`glass-panel ${styles.nav}`}>
-          <div className={styles.navContainer}>
-            <div className={styles.navContent}>
-              <div className={styles.logoArea}>
-                <Link href="/" className={styles.logoArea}>
-                  <img src="/logo.png" alt="Iota Cluster Logo" className={styles.logoImage} />
-                  <span className={styles.logoText} style={{ fontFamily: 'var(--font-outfit)' }}>Iota Cluster</span>
-                </Link>
-              </div>
-              <div className={styles.navLinks}>
-                <Link href="/" className={styles.navLink}>Home</Link>
-                <Link href="/team" className={styles.navLink}>Team</Link>
-                <Link href="/projects" className={styles.navLink}>Projects</Link>
-                <Link href="/gallery" className={styles.navLink}>Gallery</Link>
-                <Link href="/resources" className={styles.navLink}>Resources</Link>
-                <Link href="/ai-soc" className={`${styles.navLink} ${styles.aiSocNav}`}>AI Soc</Link>
-                <Link href="/blogs" className={styles.navLink}>Blogs</Link>
-              </div>
-            </div>
-          </div>
-        </nav>
+        <Navbar />
         <main className={styles.mainContent}>
           {children}
         </main>
