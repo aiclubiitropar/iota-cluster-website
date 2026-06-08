@@ -1,5 +1,5 @@
 .container {
-  max-width: 800px;
+  max-width: 700px;
   margin: 0 auto;
   padding: 2rem 1rem;
 }
@@ -14,7 +14,7 @@
 
 .roadmap {
   position: relative;
-  padding-left: 2rem;
+  margin-left: 10px;
 }
 
 /* The glowing line */
@@ -32,8 +32,9 @@
 
 .node {
   position: relative;
-  margin-bottom: 3rem;
-  padding: 2rem;
+  margin-left: 40px;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
   border: 1px solid var(--glass-border);
   background: var(--glass-bg);
   border-radius: 12px;
@@ -52,19 +53,19 @@
 .node::before {
   content: '';
   position: absolute;
-  top: 2rem;
-  left: -2.6rem;
-  width: 1.25rem;
-  height: 1.25rem;
+  top: 24px;
+  left: -46px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  background: var(--bg-main);
+  background: var(--bg-primary);
   border: 4px solid var(--accent-cyan);
   box-shadow: 0 0 10px var(--accent-cyan);
   z-index: 1;
 }
 
 .nodeTitle {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 1rem;
   color: var(--text-primary);
