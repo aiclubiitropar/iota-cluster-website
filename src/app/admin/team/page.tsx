@@ -20,13 +20,28 @@ export default async function AdminTeamPage({ searchParams }: { searchParams: Pr
       password: formData.get("password") as string,
       imageUrl: formData.get("imageUrl") as string || undefined,
       linkedinUrl: formData.get("linkedinUrl") as string || undefined,
+    const result = await createTeamMember({
+      name: formData.get("name") as string,
+      position: formData.get("position") as string,
+      email: formData.get("email") as string || undefined,
+      password: formData.get("password") as string || undefined,
+      imageUrl: formData.get("imageUrl") as string || undefined,
+      imageFile: formData.get("imageFile") as File | undefined,
+      linkedinUrl: formData.get("linkedinUrl") as string || undefined,
       githubUrl: formData.get("githubUrl") as string || undefined,
     });
-    revalidatePath("/admin/team");
-    revalidatePath("/team");
+
+    if (!result.success) {
+      redirect(`/admin/team?error=${encodeURIComponent(result.error as string)}`);
+    } else {
+      revalidatePath("/admin/team");
+      revalidatePath("/team");
+      revalidatePath("/");
+      redirect("/admin/team");
+    }
   }
 
-  async function updateMember(formData: FormData) {
+  async function updateMemberAction(formData: FormData) {
     "use server";
     const id = formData.get("id") as string;
     const result = await updateTeamMember(id, {
@@ -35,17 +50,17 @@ export default async function AdminTeamPage({ searchParams }: { searchParams: Pr
       email: formData.get("email") as string || undefined,
       password: formData.get("password") as string || undefined,
       imageUrl: formData.get("imageUrl") as string || undefined,
+      imageFile: formData.get("imageFile") as File | undefined,
       linkedinUrl: formData.get("linkedinUrl") as string || undefined,
       githubUrl: formData.get("githubUrl") as string || undefined,
     });
-    
+
     if (!result.success) {
-      console.error(result.error);
-      // Optional: Add URL parameter to show error
       redirect(`/admin/team?error=${encodeURIComponent(result.error as string)}`);
     } else {
       revalidatePath("/admin/team");
       revalidatePath("/team");
+      revalidatePath("/");
       redirect("/admin/team");
     }
   }
@@ -74,49 +89,39 @@ export default async function AdminTeamPage({ searchParams }: { searchParams: Pr
       )}
 
       <div className={`glass-panel ${styles.formSection}`}>
-        <h2 className={styles.sectionTitle}>Add New Member</h2>
+        <h2 className={styles.sectionTitle}>Add New Team Member</h2>
         <form action={addMember} className={styles.form}>
-          <div className={`${styles.inputGrid} ${styles.inputGrid2}`}>
+          <div className={`${styles.inputGrid} ${styles.inputGrid3}`}>
             <input type="text" name="name" placeholder="Full Name *" required className={styles.input} />
-            <select name="position" required className={styles.input}>
-              <option value="">Select Position *</option>
-              <option value="Secretary">Secretary</option>
-              <option value="Representative">Representative</option>
-              <option value="Mentors">Mentors</option>
-              <option value="Coordinators">Coordinators</option>
-            </select>
-            <input type="email" name="email" placeholder="Email (@iitrpr.ac.in) *" required className={styles.input} />
-            <input type="password" name="password" placeholder="Password *" required className={styles.input} />
-            <input type="url" name="imageUrl" placeholder="Image URL (Optional)" className={styles.input} />
+            <input type="text" name="position" placeholder="Position *" required className={styles.input} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <input type="url" name="imageUrl" placeholder="Image URL (Or upload below)" className={styles.input} />
+              <input type="file" name="imageFile" accept="image/*" className={styles.input} style={{ padding: '0.4rem' }} />
+            </div>
             <input type="url" name="linkedinUrl" placeholder="LinkedIn URL (Optional)" className={styles.input} />
             <input type="url" name="githubUrl" placeholder="GitHub URL (Optional)" className={styles.input} />
+            <input type="email" name="email" placeholder="Login Email (Optional)" className={styles.input} />
+            <input type="password" name="password" placeholder="Login Password (Optional)" className={styles.input} />
           </div>
           <button type="submit" className={`btn-primary ${styles.submitBtn}`}>Add Member</button>
         </form>
       </div>
 
       <div className="glass-panel p-6">
-        <h2 className={styles.sectionTitle}>Current Members</h2>
+        <h2 className={styles.sectionTitle}>Current Team Members</h2>
         {members.length === 0 ? (
-          <p className="text-[var(--text-secondary)]">No members added yet.</p>
+          <p className="text-[var(--text-secondary)]">No team members added yet.</p>
         ) : (
           <div className={styles.list}>
             {members.map((m, i) => {
               if (m.id === editId) {
                 return (
-                  <div key={m.id} className={`${styles.listItem} ${styles.formSection}`} style={{ display: 'block', padding: '1.5rem', border: '1px solid var(--accent-purple)' }}>
+                  <div key={m.id} className={`${styles.listItem} ${styles.formSection}`} style={{ display: 'block', padding: '1.5rem', border: '1px solid var(--accent-cyan)' }}>
                     <h3 style={{ marginBottom: '1rem', color: 'var(--text-primary)', fontWeight: 'bold' }}>Editing {m.name}</h3>
-                    <form action={updateMember} className={styles.form}>
+                    <form action={updateMemberAction} className={styles.form}>
                       <input type="hidden" name="id" value={m.id} />
-                      <div className={`${styles.inputGrid} ${styles.inputGrid2}`}>
+                      <div className={`${styles.inputGrid} ${styles.inputGrid3}`}>
                         <input type="text" name="name" defaultValue={m.name} placeholder="Full Name *" required className={styles.input} />
-                        <select name="position" defaultValue={m.position} required className={styles.input}>
-                          <option value="Secretary">Secretary</option>
-                          <option value="Representative">Representative</option>
-                          <option value="Mentors">Mentors</option>
-                          <option value="Coordinators">Coordinators</option>
-                        </select>
-                        <input type="email" name="email" defaultValue={m.email || ""} placeholder="Email (@iitrpr.ac.in) *" required className={styles.input} />
                         <input type="password" name="password" placeholder="New Password (Leave blank to keep current)" className={styles.input} />
                         <input type="url" name="imageUrl" defaultValue={m.imageUrl || ""} placeholder="Image URL (Optional)" className={styles.input} />
                         <input type="url" name="linkedinUrl" defaultValue={m.linkedinUrl || ""} placeholder="LinkedIn URL (Optional)" className={styles.input} />

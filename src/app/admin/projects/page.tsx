@@ -18,6 +18,7 @@ export default async function AdminProjectsPage({ searchParams }: { searchParams
       title: formData.get("title") as string,
       description: formData.get("description") as string,
       imageUrl: formData.get("imageUrl") as string || undefined,
+      imageFile: formData.get("imageFile") as File | undefined,
       githubUrl: formData.get("githubUrl") as string || undefined,
       liveUrl: formData.get("liveUrl") as string || undefined,
       deploymentUrl: formData.get("deploymentUrl") as string || undefined,
@@ -35,6 +36,7 @@ export default async function AdminProjectsPage({ searchParams }: { searchParams
       title: formData.get("title") as string,
       description: formData.get("description") as string,
       imageUrl: formData.get("imageUrl") as string || undefined,
+      imageFile: formData.get("imageFile") as File | undefined,
       githubUrl: formData.get("githubUrl") as string || undefined,
       liveUrl: formData.get("liveUrl") as string || undefined,
       deploymentUrl: formData.get("deploymentUrl") as string || undefined,
@@ -81,7 +83,10 @@ export default async function AdminProjectsPage({ searchParams }: { searchParams
           <input type="text" name="tags" placeholder="Tags (comma separated) *" required className={styles.input} />
           
           <div className={`${styles.inputGrid} ${styles.inputGrid3}`}>
-            <input type="url" name="imageUrl" placeholder="Image URL (Optional)" className={styles.input} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <input type="url" name="imageUrl" placeholder="Image URL (Or upload below)" className={styles.input} />
+              <input type="file" name="imageFile" accept="image/*" className={styles.input} style={{ padding: '0.4rem' }} />
+            </div>
             <input type="url" name="githubUrl" placeholder="GitHub URL (Optional)" className={styles.input} />
             <input type="url" name="liveUrl" placeholder="Live Demo URL (Optional)" className={styles.input} />
             <input type="url" name="deploymentUrl" placeholder="Deployment URL (Optional)" className={styles.input} style={{ gridColumn: '1 / -1' }} />
@@ -109,7 +114,10 @@ export default async function AdminProjectsPage({ searchParams }: { searchParams
                       <input type="text" name="tags" defaultValue={p.tags} placeholder="Tags (comma separated) *" required className={styles.input} />
                       
                       <div className={`${styles.inputGrid} ${styles.inputGrid3}`}>
-                        <input type="url" name="imageUrl" defaultValue={p.imageUrl || ""} placeholder="Image URL (Optional)" className={styles.input} />
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                          <input type="url" name="imageUrl" defaultValue={p.imageUrl || ""} placeholder="Image URL (Or upload below)" className={styles.input} />
+                          <input type="file" name="imageFile" accept="image/*" className={styles.input} style={{ padding: '0.4rem' }} />
+                        </div>
                         <input type="url" name="githubUrl" defaultValue={p.githubUrl || ""} placeholder="GitHub URL (Optional)" className={styles.input} />
                         <input type="url" name="liveUrl" defaultValue={p.liveUrl || ""} placeholder="Live Demo URL (Optional)" className={styles.input} />
                         <input type="url" name="deploymentUrl" defaultValue={p.deploymentUrl || ""} placeholder="Deployment URL (Optional)" className={styles.input} style={{ gridColumn: '1 / -1' }} />

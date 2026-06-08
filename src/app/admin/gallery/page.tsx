@@ -16,7 +16,8 @@ export default async function AdminGalleryPage({ searchParams }: { searchParams:
     "use server";
     await createGalleryImage({
       title: formData.get("title") as string,
-      imageUrl: formData.get("imageUrl") as string,
+      imageUrl: formData.get("imageUrl") as string | undefined,
+      imageFile: formData.get("imageFile") as File | undefined,
     });
     revalidatePath("/admin/gallery");
     revalidatePath("/");
@@ -27,7 +28,8 @@ export default async function AdminGalleryPage({ searchParams }: { searchParams:
     const id = formData.get("id") as string;
     const result = await updateGalleryImage(id, {
       title: formData.get("title") as string,
-      imageUrl: formData.get("imageUrl") as string,
+      imageUrl: formData.get("imageUrl") as string | undefined,
+      imageFile: formData.get("imageFile") as File | undefined,
     });
 
     if (!result.success) {
@@ -66,7 +68,10 @@ export default async function AdminGalleryPage({ searchParams }: { searchParams:
         <form action={addImage} className={styles.form}>
           <div className={`${styles.inputGrid} ${styles.inputGrid2}`}>
             <input type="text" name="title" placeholder="Image Title / Caption *" required className={styles.input} />
-            <input type="url" name="imageUrl" placeholder="Image URL *" required className={styles.input} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <input type="url" name="imageUrl" placeholder="Image URL (Or upload below)" className={styles.input} />
+              <input type="file" name="imageFile" accept="image/*" className={styles.input} style={{ padding: '0.4rem' }} />
+            </div>
           </div>
           <button type="submit" className={`btn-primary ${styles.submitBtn}`}>Add Image</button>
         </form>
@@ -85,7 +90,8 @@ export default async function AdminGalleryPage({ searchParams }: { searchParams:
                     <form action={updateImageAction} className={styles.form} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', height: '100%' }}>
                       <input type="hidden" name="id" value={img.id} />
                       <input type="text" name="title" defaultValue={img.title} placeholder="Image Title / Caption *" required className={styles.input} />
-                      <input type="url" name="imageUrl" defaultValue={img.imageUrl} placeholder="Image URL *" required className={styles.input} />
+                      <input type="url" name="imageUrl" defaultValue={img.imageUrl} placeholder="Image URL (Or upload below)" className={styles.input} />
+                      <input type="file" name="imageFile" accept="image/*" className={styles.input} style={{ padding: '0.4rem' }} />
                       <div style={{ display: 'flex', gap: '0.5rem', marginTop: 'auto' }}>
                         <button type="submit" className={`btn-primary ${styles.submitBtn}`} style={{ margin: 0, flex: 1, padding: '0.5rem' }}>Save</button>
                         <Link href="/admin/gallery" className={`btn-secondary ${styles.submitBtn}`} style={{ margin: 0, flex: 1, textAlign: 'center', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}>Cancel</Link>

@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { uploadImageToStorage } from "@/lib/supabase";
 
 export async function getProjects() {
   return await prisma.project.findMany({
@@ -37,13 +38,30 @@ export async function createProject(data: {
   title: string;
   description: string;
   imageUrl?: string;
+  imageFile?: File;
   githubUrl?: string;
   liveUrl?: string;
   deploymentUrl?: string;
   tags: string;
 }) {
   try {
-    const project = await prisma.project.create({ data });
+    let finalUrl = data.imageUrl;
+    if (data.imageFile && data.imageFile.size > 0) {
+      const uploadUrl = await uploadImageToStorage(data.imageFile);
+      if (uploadUrl) finalUrl = uploadUrl;
+    }
+
+    const project = await prisma.project.create({ 
+      data: {
+        title: data.title,
+        description: data.description,
+        imageUrl: finalUrl,
+        githubUrl: data.githubUrl,
+        liveUrl: data.liveUrl,
+        deploymentUrl: data.deploymentUrl,
+        tags: data.tags,
+      } 
+    });
     revalidatePath("/projects");
     revalidatePath("/admin/projects");
     return { success: true, project };
@@ -69,15 +87,33 @@ export async function updateProject(id: string, data: {
   title: string;
   description: string;
   imageUrl?: string;
+  imageFile?: File;
   githubUrl?: string;
   liveUrl?: string;
   deploymentUrl?: string;
   tags: string;
 }) {
   try {
+    const existing = await prisma.project.findUnique({ where: { id } });
+    if (!existing) return { success: false, error: "Project not found" };
+
+    let finalUrl = data.imageUrl !== undefined ? data.imageUrl : existing.imageUrl;
+    if (data.imageFile && data.imageFile.size > 0) {
+      const uploadUrl = await uploadImageToStorage(data.imageFile);
+      if (uploadUrl) finalUrl = uploadUrl;
+    }
+
     const project = await prisma.project.update({
       where: { id },
-      data
+      data: {
+        title: data.title,
+        description: data.description,
+        imageUrl: finalUrl,
+        githubUrl: data.githubUrl,
+        liveUrl: data.liveUrl,
+        deploymentUrl: data.deploymentUrl,
+        tags: data.tags,
+      }
     });
     revalidatePath("/projects");
     revalidatePath("/admin/projects");

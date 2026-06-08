@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 import bcrypt from "bcryptjs";
+import { uploadImageToStorage } from "@/lib/supabase";
 
 export async function getTeamMembers() {
   return await prisma.teamMember.findMany({
@@ -48,24 +49,34 @@ export async function reorderTeamMember(id: string, direction: "up" | "down") {
   revalidatePath("/");
 }
 
-export async function createTeamMember(data: { 
-  name: string; 
-  position: string; 
-  email: string;
-  password: string;
-  imageUrl?: string; 
-  linkedinUrl?: string; 
-  githubUrl?: string 
+export async function createTeamMember(data: {
+  name: string;
+  position: string;
+  email?: string;
+  password?: string;
+  imageUrl?: string;
+  imageFile?: File;
+  linkedinUrl?: string;
+  githubUrl?: string;
 }) {
   try {
-    // Enforce Singleton roles
-    if (data.position === "Secretary" || data.position === "Representative") {
-      const existing = await prisma.teamMember.findFirst({
-        where: { position: data.position }
-      });
-      if (existing) {
-        return { success: false, error: `Only one ${data.position} is allowed.` };
-      }
+    if (data.email) {
+      const existing = await prisma.teamMember.findUnique({ where: { email: data.email } });
+      if (existing) return { success: false, error: "Email already exists" };
+    }
+
+    const checkPos = await prisma.teamMember.findFirst({
+      where: { position: { equals: data.position, mode: 'insensitive' } }
+    });
+    const posUpper = data.position.toUpperCase();
+    if (checkPos && (posUpper === "SECRETARY" || posUpper === "SECY" || posUpper === "REPRESENTATIVE" || posUpper === "REP")) {
+      return { success: false, error: `Only one ${data.position} is allowed` };
+    }
+
+    let finalUrl = data.imageUrl;
+    if (data.imageFile && data.imageFile.size > 0) {
+      const uploadUrl = await uploadImageToStorage(data.imageFile);
+      if (uploadUrl) finalUrl = uploadUrl;
     }
 
     let hashedPassword = undefined;
@@ -73,19 +84,21 @@ export async function createTeamMember(data: {
       hashedPassword = await bcrypt.hash(data.password, 10);
     }
 
-    const member = await prisma.teamMember.create({ 
+    const member = await prisma.teamMember.create({
       data: {
         name: data.name,
         position: data.position,
         email: data.email || undefined,
         password: hashedPassword,
-        imageUrl: data.imageUrl,
-        linkedinUrl: data.linkedinUrl,
-        githubUrl: data.githubUrl,
-      } 
+        imageUrl: finalUrl,
+        linkedinUrl: data.linkedinUrl || undefined,
+        githubUrl: data.githubUrl || undefined,
+      }
     });
-    revalidatePath("/team");
+
     revalidatePath("/admin/team");
+    revalidatePath("/team");
+    revalidatePath("/");
     return { success: true, member };
   } catch (error) {
     console.error("Failed to create team member:", error);
@@ -93,64 +106,78 @@ export async function createTeamMember(data: {
   }
 }
 
-export async function updateTeamMember(id: string, data: { 
-  name: string; 
-  position: string; 
+export async function updateTeamMember(id: string, data: {
+  name: string;
+  position: string;
   email?: string;
   password?: string;
-  imageUrl?: string; 
-  linkedinUrl?: string; 
-  githubUrl?: string 
+  imageUrl?: string;
+  imageFile?: File;
+  linkedinUrl?: string;
+  githubUrl?: string;
 }) {
   try {
+    const existing = await prisma.teamMember.findUnique({ where: { id } });
+    if (!existing) return { success: false, error: "Team member not found" };
+
     const cookieStore = await cookies();
     const token = cookieStore.get("admin_token")?.value;
     if (!token) return { success: false, error: "Unauthorized" };
 
-    const secretKey = new TextEncoder().encode(process.env.JWT_SECRET || "default_fallback_secret_for_development_only");
-    const { payload } = await jwtVerify(token, secretKey);
-    const callerPosition = (payload.position as string)?.toLowerCase() || "";
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET || "default_fallback_secret_for_development_only"));
+    const editorRole = (payload.position as string)?.toLowerCase() || "";
 
-    const targetMember = await prisma.teamMember.findUnique({ where: { id } });
-    if (!targetMember) return { success: false, error: "Member not found" };
+    const targetRole = existing.position.toLowerCase();
 
-    // Hierarchy Enforcement
-    if (callerPosition !== "secretary" && callerPosition !== "secy" && callerPosition !== "admin") {
-      if (targetMember.position.toLowerCase() === "secretary" || targetMember.position.toLowerCase() === "secy") {
+    if (editorRole !== "secretary" && editorRole !== "secy") {
+      if (targetRole === "secretary" || targetRole === "secy") {
         return { success: false, error: "You do not have permission to edit the Secretary." };
       }
     }
 
-    // Enforce Singleton roles if position changed
-    if (data.position !== targetMember.position && (data.position === "Secretary" || data.position === "Representative")) {
-      const existing = await prisma.teamMember.findFirst({
-        where: { position: data.position }
+    if (data.email && data.email !== existing.email) {
+      const emailCheck = await prisma.teamMember.findUnique({ where: { email: data.email } });
+      if (emailCheck) return { success: false, error: "Email already exists" };
+    }
+
+    if (data.position.toLowerCase() !== existing.position.toLowerCase()) {
+      const checkPos = await prisma.teamMember.findFirst({
+        where: { position: { equals: data.position, mode: 'insensitive' } }
       });
-      if (existing) {
-        return { success: false, error: `Only one ${data.position} is allowed.` };
+      const posUpper = data.position.toUpperCase();
+      if (checkPos && (posUpper === "SECRETARY" || posUpper === "SECY" || posUpper === "REPRESENTATIVE" || posUpper === "REP")) {
+        return { success: false, error: `Only one ${data.position} is allowed` };
       }
     }
 
-    let hashedPassword = targetMember.password;
+    let finalUrl = data.imageUrl !== undefined ? data.imageUrl : existing.imageUrl;
+    if (data.imageFile && data.imageFile.size > 0) {
+      const uploadUrl = await uploadImageToStorage(data.imageFile);
+      if (uploadUrl) finalUrl = uploadUrl;
+    }
+
+    let hashedPassword = existing.password;
     if (data.password && data.password.trim() !== "") {
       hashedPassword = await bcrypt.hash(data.password, 10);
     }
 
-    const updatedMember = await prisma.teamMember.update({ 
+    const member = await prisma.teamMember.update({
       where: { id },
       data: {
         name: data.name,
         position: data.position,
         email: data.email || undefined,
         password: hashedPassword,
-        imageUrl: data.imageUrl,
-        linkedinUrl: data.linkedinUrl,
-        githubUrl: data.githubUrl,
-      } 
+        imageUrl: finalUrl,
+        linkedinUrl: data.linkedinUrl || undefined,
+        githubUrl: data.githubUrl || undefined,
+      }
     });
-    revalidatePath("/team");
+
     revalidatePath("/admin/team");
-    return { success: true, member: updatedMember };
+    revalidatePath("/team");
+    revalidatePath("/");
+    return { success: true, member };
   } catch (error) {
     console.error("Failed to update team member:", error);
     return { success: false, error: "Failed to update team member" };

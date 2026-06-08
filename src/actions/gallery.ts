@@ -32,9 +32,22 @@ export async function reorderGalleryImage(id: string, direction: "up" | "down") 
   revalidatePath("/");
 }
 
-export async function createGalleryImage(data: { title: string; imageUrl: string }) {
+import { uploadImageToStorage } from "@/lib/supabase";
+
+export async function createGalleryImage(data: { title: string; imageUrl?: string; imageFile?: File }) {
   try {
-    const img = await prisma.galleryImage.create({ data });
+    let finalUrl = data.imageUrl || "";
+
+    if (data.imageFile && data.imageFile.size > 0) {
+      const uploadUrl = await uploadImageToStorage(data.imageFile);
+      if (uploadUrl) finalUrl = uploadUrl;
+    }
+
+    if (!finalUrl) {
+      return { success: false, error: "Image URL or File is required" };
+    }
+
+    const img = await prisma.galleryImage.create({ data: { title: data.title, imageUrl: finalUrl } });
     revalidatePath("/admin/gallery");
     revalidatePath("/");
     return { success: true, img };
@@ -44,11 +57,21 @@ export async function createGalleryImage(data: { title: string; imageUrl: string
   }
 }
 
-export async function updateGalleryImage(id: string, data: { title: string; imageUrl: string }) {
+export async function updateGalleryImage(id: string, data: { title: string; imageUrl?: string; imageFile?: File }) {
   try {
+    const existing = await prisma.galleryImage.findUnique({ where: { id } });
+    if (!existing) return { success: false, error: "Not found" };
+
+    let finalUrl = data.imageUrl || existing.imageUrl;
+
+    if (data.imageFile && data.imageFile.size > 0) {
+      const uploadUrl = await uploadImageToStorage(data.imageFile);
+      if (uploadUrl) finalUrl = uploadUrl;
+    }
+
     const img = await prisma.galleryImage.update({
       where: { id },
-      data
+      data: { title: data.title, imageUrl: finalUrl }
     });
     revalidatePath("/admin/gallery");
     revalidatePath("/");
