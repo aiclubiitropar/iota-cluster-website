@@ -14,10 +14,16 @@ export default async function AdminProjectsPage({ searchParams }: { searchParams
   const errorMsg = params?.error;
   const allProjects = await getProjects();
   const role = await getCurrentRole();
-  const projects = allProjects;
+  const isMember = role === "members" || role === "member";
+  
+  // Members only see AI Soc projects, so they cannot edit non-AI Soc projects
+  const projects = isMember ? allProjects.filter(p => p.isAiSoc) : allProjects;
 
   async function addProject(formData: FormData) {
     "use server";
+    const currentRole = await getCurrentRole();
+    const currentIsMember = currentRole === "members" || currentRole === "member";
+    
     await createProject({
       title: formData.get("title") as string,
       description: formData.get("description") as string,
@@ -27,7 +33,7 @@ export default async function AdminProjectsPage({ searchParams }: { searchParams
       liveUrl: formData.get("liveUrl") as string || undefined,
       deploymentUrl: formData.get("deploymentUrl") as string || undefined,
       tags: formData.get("tags") as string,
-      isAiSoc: formData.get("isAiSoc") === "on",
+      isAiSoc: currentIsMember ? true : formData.get("isAiSoc") === "on",
     });
     revalidatePath("/admin/projects");
     revalidatePath("/projects");
@@ -37,6 +43,9 @@ export default async function AdminProjectsPage({ searchParams }: { searchParams
   async function updateProjectAction(formData: FormData) {
     "use server";
     const id = formData.get("id") as string;
+    const currentRole = await getCurrentRole();
+    const currentIsMember = currentRole === "members" || currentRole === "member";
+
     const result = await updateProject(id, {
       title: formData.get("title") as string,
       description: formData.get("description") as string,
@@ -46,7 +55,7 @@ export default async function AdminProjectsPage({ searchParams }: { searchParams
       liveUrl: formData.get("liveUrl") as string || undefined,
       deploymentUrl: formData.get("deploymentUrl") as string || undefined,
       tags: formData.get("tags") as string,
-      isAiSoc: formData.get("isAiSoc") === "on",
+      isAiSoc: currentIsMember ? true : formData.get("isAiSoc") === "on",
     });
 
     if (!result.success) {
@@ -89,9 +98,10 @@ export default async function AdminProjectsPage({ searchParams }: { searchParams
           <input type="text" name="tags" placeholder="Tags (comma separated) *" required className={styles.input} />
 
           <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: '0.5rem 0', color: 'var(--text-primary)' }}>
-            <input type="checkbox" name="isAiSoc" defaultChecked={role === "member" || role === "members"} />
+            <input type="checkbox" name="isAiSoc" defaultChecked={isMember} disabled={isMember} />
             <span>☑ Is this an AI Soc project?</span>
           </label>
+          {isMember && <input type="hidden" name="isAiSoc" value="on" />}
 
           <div className={`${styles.inputGrid} ${styles.inputGrid3}`}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -125,9 +135,10 @@ export default async function AdminProjectsPage({ searchParams }: { searchParams
                       <input type="text" name="tags" defaultValue={p.tags} placeholder="Tags (comma separated) *" required className={styles.input} />
 
                       <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: '0.5rem 0', color: 'var(--text-primary)' }}>
-                        <input type="checkbox" name="isAiSoc" defaultChecked={p.isAiSoc} />
+                        <input type="checkbox" name="isAiSoc" defaultChecked={p.isAiSoc} disabled={isMember} />
                         <span>☑ Is this an AI Soc project?</span>
                       </label>
+                      {isMember && <input type="hidden" name="isAiSoc" value="on" />}
 
                       <div className={`${styles.inputGrid} ${styles.inputGrid3}`}>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
