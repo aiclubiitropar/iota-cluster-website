@@ -117,25 +117,25 @@ export default async function AdminGalleryPage({ searchParams }: { searchParams:
                 : img.imageUrl;
 
               return (
-                <div key={img.id} className="border border-[var(--glass-border)] rounded-md overflow-hidden bg-[var(--glass-bg)] relative group" style={{ display: 'flex', flexDirection: 'column' }}>
+                <div key={img.id} style={{ display: 'flex', flexDirection: 'column', position: 'relative', border: '1px solid var(--glass-border)', borderRadius: '8px', overflow: 'hidden', background: 'var(--glass-bg)' }}>
                   <div style={{ height: '200px', width: '100%', overflow: 'hidden' }}>
                     <img src={optimizedUrl} alt={img.title || "Gallery Image"} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
                   </div>
-                  <div className="p-3" style={{ padding: '1rem' }}>
-                    <p className="font-bold" style={{ fontWeight: 'bold', color: 'var(--text-primary)', margin: 0 }}>{img.title}</p>
+                  <div style={{ padding: '1rem' }}>
+                    <p style={{ fontWeight: 'bold', color: 'var(--text-primary)', margin: 0, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{img.title || "No Title"}</p>
                   </div>
                   
-                  <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition">
-                    <Link href={`/admin/gallery?edit=${img.id}`} className="p-1.5 bg-black/60 text-white rounded hover:bg-[var(--accent-cyan)] backdrop-blur-sm flex items-center justify-center" title="Edit">
+                  <div style={{ position: 'absolute', top: '0.5rem', right: '0.5rem', display: 'flex', gap: '0.25rem', zIndex: 10 }}>
+                    <Link href={`/admin/gallery?edit=${img.id}`} style={{ padding: '0.4rem', background: 'rgba(0,0,0,0.7)', color: 'white', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }} title="Edit">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                     </Link>
                     <form action={moveUp.bind(null, img.id)}>
-                      <button type="submit" disabled={i === 0} className="p-1.5 bg-black/60 text-white rounded hover:bg-[var(--accent-purple)] disabled:opacity-30 backdrop-blur-sm flex items-center justify-center" title="Move Up">
+                      <button type="submit" disabled={i === 0} style={{ padding: '0.4rem', background: 'rgba(0,0,0,0.7)', color: 'white', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: i === 0 ? 0.3 : 1, cursor: i === 0 ? 'not-allowed' : 'pointer' }} title="Move Up">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
                       </button>
                     </form>
                     <form action={moveDown.bind(null, img.id)}>
-                      <button type="submit" disabled={i === images.length - 1} className="p-1.5 bg-black/60 text-white rounded hover:bg-[var(--accent-purple)] disabled:opacity-30 backdrop-blur-sm flex items-center justify-center" title="Move Down">
+                      <button type="submit" disabled={i === images.length - 1} style={{ padding: '0.4rem', background: 'rgba(0,0,0,0.7)', color: 'white', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: i === images.length - 1 ? 0.3 : 1, cursor: i === images.length - 1 ? 'not-allowed' : 'pointer' }} title="Move Down">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                       </button>
                     </form>
