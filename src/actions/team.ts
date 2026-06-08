@@ -2,6 +2,8 @@
 
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
+import { jwtVerify } from "jose";
 import bcrypt from "bcryptjs";
 
 export async function getTeamMembers() {
@@ -88,6 +90,70 @@ export async function createTeamMember(data: {
   } catch (error) {
     console.error("Failed to create team member:", error);
     return { success: false, error: "Failed to create team member" };
+  }
+}
+
+export async function updateTeamMember(id: string, data: { 
+  name: string; 
+  position: string; 
+  email?: string;
+  password?: string;
+  imageUrl?: string; 
+  linkedinUrl?: string; 
+  githubUrl?: string 
+}) {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("admin_token")?.value;
+    if (!token) return { success: false, error: "Unauthorized" };
+
+    const secretKey = new TextEncoder().encode(process.env.JWT_SECRET || "default_fallback_secret_for_development_only");
+    const { payload } = await jwtVerify(token, secretKey);
+    const callerPosition = (payload.position as string)?.toLowerCase() || "";
+
+    const targetMember = await prisma.teamMember.findUnique({ where: { id } });
+    if (!targetMember) return { success: false, error: "Member not found" };
+
+    // Hierarchy Enforcement
+    if (callerPosition !== "secretary" && callerPosition !== "secy" && callerPosition !== "admin") {
+      if (targetMember.position.toLowerCase() === "secretary" || targetMember.position.toLowerCase() === "secy") {
+        return { success: false, error: "You do not have permission to edit the Secretary." };
+      }
+    }
+
+    // Enforce Singleton roles if position changed
+    if (data.position !== targetMember.position && (data.position === "Secretary" || data.position === "Representative")) {
+      const existing = await prisma.teamMember.findFirst({
+        where: { position: data.position }
+      });
+      if (existing) {
+        return { success: false, error: `Only one ${data.position} is allowed.` };
+      }
+    }
+
+    let hashedPassword = targetMember.password;
+    if (data.password && data.password.trim() !== "") {
+      hashedPassword = await bcrypt.hash(data.password, 10);
+    }
+
+    const updatedMember = await prisma.teamMember.update({ 
+      where: { id },
+      data: {
+        name: data.name,
+        position: data.position,
+        email: data.email || undefined,
+        password: hashedPassword,
+        imageUrl: data.imageUrl,
+        linkedinUrl: data.linkedinUrl,
+        githubUrl: data.githubUrl,
+      } 
+    });
+    revalidatePath("/team");
+    revalidatePath("/admin/team");
+    return { success: true, member: updatedMember };
+  } catch (error) {
+    console.error("Failed to update team member:", error);
+    return { success: false, error: "Failed to update team member" };
   }
 }
 
