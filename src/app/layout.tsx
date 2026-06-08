@@ -10,7 +10,7 @@ const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 
 export const metadata: Metadata = {
   title: "Iota Cluster | AI Club of IIT Ropar",
-  description: "The premier Artificial Intelligence and Machine Learning club at the Indian Institute of Technology Ropar.",
+  description: "The Artificial Intelligence and Machine Learning club at the Indian Institute of Technology Ropar.",
 };
 
 export default function RootLayout({

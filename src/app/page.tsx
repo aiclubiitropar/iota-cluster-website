@@ -25,7 +25,7 @@ export default async function Home() {
           Welcome to <span className="text-gradient">Iota Cluster</span>
         </h1>
         <p className={styles.subtitle}>
-          The premier Artificial Intelligence and Machine Learning club at IIT Ropar. 
+          The Artificial Intelligence and Machine Learning club at IIT Ropar. 
           We build, learn, and innovate with GenAI, RAG, and cutting-edge technologies.
         </p>
         <div className={styles.actions}>
