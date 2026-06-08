@@ -115,10 +115,15 @@ export default async function AdminTeamPage({ searchParams }: { searchParams: Pr
                       <input type="hidden" name="id" value={m.id} />
                       <div className={`${styles.inputGrid} ${styles.inputGrid3}`}>
                         <input type="text" name="name" defaultValue={m.name} placeholder="Full Name *" required className={styles.input} />
-                        <input type="password" name="password" placeholder="New Password (Leave blank to keep current)" className={styles.input} />
-                        <input type="url" name="imageUrl" defaultValue={m.imageUrl || ""} placeholder="Image URL (Optional)" className={styles.input} />
+                        <input type="text" name="position" defaultValue={m.position} placeholder="Position *" required className={styles.input} />
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                          <input type="url" name="imageUrl" defaultValue={m.imageUrl || ""} placeholder="Image URL (Or upload below)" className={styles.input} />
+                          <input type="file" name="imageFile" accept="image/*" className={styles.input} style={{ padding: '0.4rem' }} />
+                        </div>
                         <input type="url" name="linkedinUrl" defaultValue={m.linkedinUrl || ""} placeholder="LinkedIn URL (Optional)" className={styles.input} />
                         <input type="url" name="githubUrl" defaultValue={m.githubUrl || ""} placeholder="GitHub URL (Optional)" className={styles.input} />
+                        <input type="email" name="email" defaultValue={m.email || ""} placeholder="Login Email (Optional)" className={styles.input} />
+                        <input type="password" name="password" placeholder="New Password (Leave blank to keep current)" className={styles.input} />
                       </div>
                       <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
                         <button type="submit" className={`btn-primary ${styles.submitBtn}`} style={{ margin: 0, flex: 1 }}>Save Changes</button>
