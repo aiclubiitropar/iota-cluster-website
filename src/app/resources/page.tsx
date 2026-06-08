@@ -25,7 +25,9 @@ export default async function ResourcesPage() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Learning Roadmap</h1>
+      <h1 className={styles.title}>
+        Learning <span className="text-gradient">Roadmap</span>
+      </h1>
 
       {resources.length === 0 ? (
         <div className="glass-panel text-center p-8 text-[var(--text-secondary)]">
