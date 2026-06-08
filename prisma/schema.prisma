@@ -51,3 +51,14 @@ model GalleryImage {
   order        Int      @default(0)
   createdAt    DateTime @default(now())
 }
+
+model Blog {
+  id          String   @id @default(uuid())
+  title       String
+  author      String
+  imageUrl    String?
+  summary     String
+  content     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

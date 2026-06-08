@@ -12,7 +12,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <Link href="/admin" className={styles.navLink}>
             Overview
           </Link>
-          {role !== "member" && (
+          {role !== "members" && (
             <Link href="/admin/team" className={styles.navLink}>
               Manage Team
             </Link>
@@ -20,11 +20,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <Link href="/admin/projects" className={styles.navLink}>
             Manage Projects
           </Link>
-          {role !== "member" && (
+          {role !== "members" && (
             <Link href="/admin/gallery" className={styles.navLink}>
               Manage Gallery
             </Link>
           )}
+          <Link href="/admin/blogs" className={styles.navLink}>
+            Manage Blogs
+          </Link>
         </nav>
       </aside>
       <main className={`glass-panel ${styles.mainArea}`}>
