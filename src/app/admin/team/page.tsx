@@ -1,4 +1,4 @@
-import { getTeamMembers, createTeamMember } from "@/actions/team";
+import { getTeamMembers, createTeamMember, reorderTeamMember } from "@/actions/team";
 import { revalidatePath } from "next/cache";
 import styles from "../admin.module.css";
 
@@ -16,6 +16,16 @@ export default async function AdminTeamPage() {
     });
     revalidatePath("/admin/team");
     revalidatePath("/team");
+  }
+
+  async function moveUp(id: string) {
+    "use server";
+    await reorderTeamMember(id, "up");
+  }
+
+  async function moveDown(id: string) {
+    "use server";
+    await reorderTeamMember(id, "down");
   }
 
   return (
@@ -42,11 +52,23 @@ export default async function AdminTeamPage() {
           <p className="text-[var(--text-secondary)]">No members added yet.</p>
         ) : (
           <div className={styles.list}>
-            {members.map(m => (
-              <div key={m.id} className={styles.listItem}>
+            {members.map((m, i) => (
+              <div key={m.id} className={styles.listItem} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
                   <p className={styles.itemTitle}>{m.name}</p>
                   <p className={styles.itemSubtitle}>{m.position}</p>
+                </div>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <form action={moveUp.bind(null, m.id)}>
+                    <button type="submit" disabled={i === 0} className="p-2 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded hover:bg-[var(--accent-purple)] transition disabled:opacity-30">
+                      ↑
+                    </button>
+                  </form>
+                  <form action={moveDown.bind(null, m.id)}>
+                    <button type="submit" disabled={i === members.length - 1} className="p-2 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded hover:bg-[var(--accent-purple)] transition disabled:opacity-30">
+                      ↓
+                    </button>
+                  </form>
                 </div>
               </div>
             ))}

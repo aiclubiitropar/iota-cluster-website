@@ -1,4 +1,4 @@
-import { getGalleryImages, createGalleryImage } from "@/actions/gallery";
+import { getGalleryImages, createGalleryImage, reorderGalleryImage } from "@/actions/gallery";
 import { revalidatePath } from "next/cache";
 import styles from "../admin.module.css";
 
@@ -13,6 +13,16 @@ export default async function AdminGalleryPage() {
     });
     revalidatePath("/admin/gallery");
     revalidatePath("/");
+  }
+
+  async function moveUp(id: string) {
+    "use server";
+    await reorderGalleryImage(id, "up");
+  }
+
+  async function moveDown(id: string) {
+    "use server";
+    await reorderGalleryImage(id, "down");
   }
 
   return (
@@ -36,11 +46,24 @@ export default async function AdminGalleryPage() {
           <p className="text-[var(--text-secondary)]">No images added yet.</p>
         ) : (
           <div className={styles.grid}>
-            {images.map(img => (
-              <div key={img.id} className="border border-[var(--glass-border)] rounded-md overflow-hidden bg-[var(--glass-bg)]">
+            {images.map((img, i) => (
+              <div key={img.id} className="border border-[var(--glass-border)] rounded-md overflow-hidden bg-[var(--glass-bg)] relative group">
                 <img src={img.imageUrl} alt={img.title} className="w-full h-48 object-cover" />
                 <div className="p-3">
                   <p className="font-bold">{img.title}</p>
+                </div>
+                
+                <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition">
+                  <form action={moveUp.bind(null, img.id)}>
+                    <button type="submit" disabled={i === 0} className="p-1.5 bg-black/60 text-white rounded hover:bg-[var(--accent-purple)] disabled:opacity-30 backdrop-blur-sm">
+                      ↑
+                    </button>
+                  </form>
+                  <form action={moveDown.bind(null, img.id)}>
+                    <button type="submit" disabled={i === images.length - 1} className="p-1.5 bg-black/60 text-white rounded hover:bg-[var(--accent-purple)] disabled:opacity-30 backdrop-blur-sm">
+                      ↓
+                    </button>
+                  </form>
                 </div>
               </div>
             ))}

@@ -1,4 +1,4 @@
-import { getProjects, createProject } from "@/actions/projects";
+import { getProjects, createProject, reorderProject } from "@/actions/projects";
 import { revalidatePath } from "next/cache";
 import styles from "../admin.module.css";
 
@@ -19,6 +19,16 @@ export default async function AdminProjectsPage() {
     revalidatePath("/admin/projects");
     revalidatePath("/projects");
     revalidatePath("/");
+  }
+
+  async function moveUp(id: string) {
+    "use server";
+    await reorderProject(id, "up");
+  }
+
+  async function moveDown(id: string) {
+    "use server";
+    await reorderProject(id, "down");
   }
 
   return (
@@ -49,11 +59,23 @@ export default async function AdminProjectsPage() {
           <p className="text-[var(--text-secondary)]">No projects added yet.</p>
         ) : (
           <div className={styles.list}>
-            {projects.map(p => (
-              <div key={p.id} className={styles.listItem}>
+            {projects.map((p, i) => (
+              <div key={p.id} className={styles.listItem} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ overflow: 'hidden' }}>
                   <p className={styles.itemTitle}>{p.title}</p>
                   <p className={styles.itemDesc}>{p.description}</p>
+                </div>
+                <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0, marginLeft: '1rem' }}>
+                  <form action={moveUp.bind(null, p.id)}>
+                    <button type="submit" disabled={i === 0} className="p-2 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded hover:bg-[var(--accent-purple)] transition disabled:opacity-30">
+                      ↑
+                    </button>
+                  </form>
+                  <form action={moveDown.bind(null, p.id)}>
+                    <button type="submit" disabled={i === projects.length - 1} className="p-2 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded hover:bg-[var(--accent-purple)] transition disabled:opacity-30">
+                      ↓
+                    </button>
+                  </form>
                 </div>
               </div>
             ))}
