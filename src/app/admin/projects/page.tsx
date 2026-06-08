@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import styles from "../admin.module.css";
 import SubmitButton from "@/components/SubmitButton";
+import { getCurrentRole } from "@/actions/auth";
 
 export const dynamic = 'force-dynamic';
 
@@ -11,7 +12,9 @@ export default async function AdminProjectsPage({ searchParams }: { searchParams
   const params = await searchParams;
   const editId = params?.edit;
   const errorMsg = params?.error;
-  const projects = await getProjects();
+  const allProjects = await getProjects();
+  const role = await getCurrentRole();
+  const projects = role === "member" ? allProjects.filter(p => p.isAiSoc) : allProjects;
 
   async function addProject(formData: FormData) {
     "use server";
@@ -24,6 +27,7 @@ export default async function AdminProjectsPage({ searchParams }: { searchParams
       liveUrl: formData.get("liveUrl") as string || undefined,
       deploymentUrl: formData.get("deploymentUrl") as string || undefined,
       tags: formData.get("tags") as string,
+      isAiSoc: (await getCurrentRole()) === "member" ? true : formData.get("isAiSoc") === "on",
     });
     revalidatePath("/admin/projects");
     revalidatePath("/projects");
@@ -42,6 +46,7 @@ export default async function AdminProjectsPage({ searchParams }: { searchParams
       liveUrl: formData.get("liveUrl") as string || undefined,
       deploymentUrl: formData.get("deploymentUrl") as string || undefined,
       tags: formData.get("tags") as string,
+      isAiSoc: (await getCurrentRole()) === "member" ? true : formData.get("isAiSoc") === "on",
     });
 
     if (!result.success) {
@@ -83,6 +88,13 @@ export default async function AdminProjectsPage({ searchParams }: { searchParams
           <textarea name="description" placeholder="Project Description *" required rows={3} className={styles.input} />
           <input type="text" name="tags" placeholder="Tags (comma separated) *" required className={styles.input} />
           
+          {role !== "member" && (
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: '0.5rem 0', color: 'var(--text-primary)' }}>
+              <input type="checkbox" name="isAiSoc" />
+              <span>☑ Is this an AI Soc project? (Hides from main projects page)</span>
+            </label>
+          )}
+
           <div className={`${styles.inputGrid} ${styles.inputGrid3}`}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <input type="url" name="imageUrl" placeholder="Image URL (Or upload below)" className={styles.input} />
@@ -114,6 +126,13 @@ export default async function AdminProjectsPage({ searchParams }: { searchParams
                       <textarea name="description" defaultValue={p.description} placeholder="Project Description *" required rows={3} className={styles.input} />
                       <input type="text" name="tags" defaultValue={p.tags} placeholder="Tags (comma separated) *" required className={styles.input} />
                       
+                      {role !== "member" && (
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: '0.5rem 0', color: 'var(--text-primary)' }}>
+                          <input type="checkbox" name="isAiSoc" defaultChecked={p.isAiSoc} />
+                          <span>☑ Is this an AI Soc project?</span>
+                        </label>
+                      )}
+
                       <div className={`${styles.inputGrid} ${styles.inputGrid3}`}>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                           <input type="url" name="imageUrl" defaultValue={p.imageUrl || ""} placeholder="Image URL (Or upload below)" className={styles.input} />

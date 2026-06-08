@@ -43,6 +43,7 @@ export async function createProject(data: {
   liveUrl?: string;
   deploymentUrl?: string;
   tags: string;
+  isAiSoc?: boolean;
 }) {
   try {
     let finalUrl = data.imageUrl;
@@ -60,6 +61,7 @@ export async function createProject(data: {
         liveUrl: data.liveUrl,
         deploymentUrl: data.deploymentUrl,
         tags: data.tags,
+        isAiSoc: data.isAiSoc || false,
       } 
     });
     revalidatePath("/projects");
@@ -92,6 +94,7 @@ export async function updateProject(id: string, data: {
   liveUrl?: string;
   deploymentUrl?: string;
   tags: string;
+  isAiSoc?: boolean;
 }) {
   try {
     const existing = await prisma.project.findUnique({ where: { id } });
@@ -113,6 +116,7 @@ export async function updateProject(id: string, data: {
         liveUrl: data.liveUrl,
         deploymentUrl: data.deploymentUrl,
         tags: data.tags,
+        isAiSoc: data.isAiSoc !== undefined ? data.isAiSoc : existing.isAiSoc,
       }
     });
     revalidatePath("/projects");

@@ -4,7 +4,8 @@ import styles from "./page.module.css";
 export const dynamic = 'force-dynamic';
 
 export default async function TeamPage() {
-  const members = await getTeamMembers();
+  const allMembers = await getTeamMembers();
+  const members = allMembers.filter(m => m.position.toLowerCase() !== "member");
 
   return (
     <div className={styles.container}>

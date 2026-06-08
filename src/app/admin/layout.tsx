@@ -1,7 +1,9 @@
 import Link from "next/link";
 import styles from "./admin.module.css";
+import { getCurrentRole } from "@/actions/auth";
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const role = await getCurrentRole();
   return (
     <div className={styles.layoutContainer}>
       <aside className={`glass-panel ${styles.sidebar}`}>
@@ -10,15 +12,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link href="/admin" className={styles.navLink}>
             Overview
           </Link>
-          <Link href="/admin/team" className={styles.navLink}>
-            Manage Team
-          </Link>
+          {role !== "member" && (
+            <Link href="/admin/team" className={styles.navLink}>
+              Manage Team
+            </Link>
+          )}
           <Link href="/admin/projects" className={styles.navLink}>
             Manage Projects
           </Link>
-          <Link href="/admin/gallery" className={styles.navLink}>
-            Manage Gallery
-          </Link>
+          {role !== "member" && (
+            <Link href="/admin/gallery" className={styles.navLink}>
+              Manage Gallery
+            </Link>
+          )}
         </nav>
       </aside>
       <main className={`glass-panel ${styles.mainArea}`}>

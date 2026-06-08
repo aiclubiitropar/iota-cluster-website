@@ -6,7 +6,8 @@ import { getGalleryImages } from "@/actions/gallery";
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const projects = await getProjects();
+  const allProjects = await getProjects();
+  const projects = allProjects.filter(p => !p.isAiSoc);
   const recentProjects = projects.slice(0, 3);
   const galleryImages = await getGalleryImages();
   const recentGallery = galleryImages.slice(0, 8); // show max 8 images

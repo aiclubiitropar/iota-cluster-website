@@ -4,7 +4,8 @@ import styles from "./page.module.css";
 export const dynamic = 'force-dynamic';
 
 export default async function ProjectsPage() {
-  const projects = await getProjects();
+  const allProjects = await getProjects();
+  const projects = allProjects.filter(p => !p.isAiSoc);
 
   return (
     <div className={styles.container}>

@@ -20,7 +20,15 @@ export async function middleware(request: NextRequest) {
       if (request.nextUrl.pathname.startsWith('/admin/team')) {
         const allowedRoles = ["secretary", "secy", "representative", "rep", "admin"];
         if (!allowedRoles.includes(position)) {
-          // If a coordinator/mentor tries to access Team, redirect them to overview
+          // If a coordinator/mentor/member tries to access Team, redirect them to overview
+          return NextResponse.redirect(new URL('/admin', request.url));
+        }
+      }
+
+      // RBAC for gallery management
+      if (request.nextUrl.pathname.startsWith('/admin/gallery')) {
+        const restrictedRoles = ["member"];
+        if (restrictedRoles.includes(position)) {
           return NextResponse.redirect(new URL('/admin', request.url));
         }
       }
