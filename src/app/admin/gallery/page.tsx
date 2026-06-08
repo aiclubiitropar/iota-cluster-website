@@ -103,7 +103,7 @@ export default async function AdminGalleryPage({ searchParams }: { searchParams:
 
               return (
                 <div key={img.id} className="border border-[var(--glass-border)] rounded-md overflow-hidden bg-[var(--glass-bg)] relative group">
-                  <img src={img.imageUrl} alt={img.title} className="w-full h-48 object-cover" />
+                  <img src={img.imageUrl} alt={img.title || "Gallery Image"} className="w-full h-48 object-cover" />
                   <div className="p-3">
                     <p className="font-bold">{img.title}</p>
                   </div>
