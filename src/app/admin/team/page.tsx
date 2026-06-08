@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import styles from "../admin.module.css";
+import SubmitButton from "@/components/SubmitButton";
 
 export const dynamic = 'force-dynamic';
 
@@ -96,7 +97,7 @@ export default async function AdminTeamPage({ searchParams }: { searchParams: Pr
             <input type="email" name="email" placeholder="Login Email (Optional)" className={styles.input} />
             <input type="password" name="password" placeholder="Login Password (Optional)" className={styles.input} />
           </div>
-          <button type="submit" className={`btn-primary ${styles.submitBtn}`}>Add Member</button>
+          <SubmitButton defaultText="Add Member" loadingText="Adding Member..." className={`btn-primary ${styles.submitBtn}`} />
         </form>
       </div>
 
@@ -126,7 +127,7 @@ export default async function AdminTeamPage({ searchParams }: { searchParams: Pr
                         <input type="password" name="password" placeholder="New Password (Leave blank to keep current)" className={styles.input} />
                       </div>
                       <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
-                        <button type="submit" className={`btn-primary ${styles.submitBtn}`} style={{ margin: 0, flex: 1 }}>Save Changes</button>
+                        <SubmitButton defaultText="Save Changes" loadingText="Saving..." className={`btn-primary ${styles.submitBtn}`} style={{ margin: 0, flex: 1 }} />
                         <Link href="/admin/team" className={`btn-secondary ${styles.submitBtn}`} style={{ margin: 0, flex: 1, textAlign: 'center', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}>Cancel</Link>
                       </div>
                     </form>
