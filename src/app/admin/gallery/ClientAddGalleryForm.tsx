@@ -12,7 +12,8 @@ export default function ClientAddGalleryForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+    const formElement = e.currentTarget;
+    const formData = new FormData(formElement);
     const files = formData.getAll("imageFiles") as File[];
     const title = formData.get("title") as string;
     const imageUrl = formData.get("imageUrl") as string;
@@ -37,7 +38,7 @@ export default function ClientAddGalleryForm() {
         setProgress(p => p + 1);
       }
 
-      e.currentTarget.reset();
+      formElement.reset();
     } catch (error) {
       console.error("Upload error", error);
       alert("An error occurred during upload. Please try again.");
