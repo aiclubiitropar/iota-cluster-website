@@ -1,5 +1,6 @@
-import prisma from "@/lib/prisma";
+"use server";
 
+import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
 export async function getGalleryImages() {
@@ -32,7 +33,40 @@ export async function reorderGalleryImage(id: string, direction: "up" | "down") 
 }
 
 export async function createGalleryImage(data: { title: string; imageUrl: string }) {
-  return await prisma.galleryImage.create({
-    data
-  });
+  try {
+    const img = await prisma.galleryImage.create({ data });
+    revalidatePath("/admin/gallery");
+    revalidatePath("/");
+    return { success: true, img };
+  } catch (error) {
+    console.error("Failed to create gallery image:", error);
+    return { success: false, error: "Failed to create gallery image" };
+  }
+}
+
+export async function updateGalleryImage(id: string, data: { title: string; imageUrl: string }) {
+  try {
+    const img = await prisma.galleryImage.update({
+      where: { id },
+      data
+    });
+    revalidatePath("/admin/gallery");
+    revalidatePath("/");
+    return { success: true, img };
+  } catch (error) {
+    console.error("Failed to update gallery image:", error);
+    return { success: false, error: "Failed to update gallery image" };
+  }
+}
+
+export async function deleteGalleryImage(id: string) {
+  try {
+    await prisma.galleryImage.delete({ where: { id } });
+    revalidatePath("/admin/gallery");
+    revalidatePath("/");
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to delete gallery image:", error);
+    return { success: false, error: "Failed to delete gallery image" };
+  }
 }

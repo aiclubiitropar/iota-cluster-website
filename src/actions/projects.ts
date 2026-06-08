@@ -64,3 +64,26 @@ export async function deleteProject(id: string) {
     return { success: false, error: "Failed to delete project" };
   }
 }
+
+export async function updateProject(id: string, data: {
+  title: string;
+  description: string;
+  imageUrl?: string;
+  githubUrl?: string;
+  liveUrl?: string;
+  deploymentUrl?: string;
+  tags: string;
+}) {
+  try {
+    const project = await prisma.project.update({
+      where: { id },
+      data
+    });
+    revalidatePath("/projects");
+    revalidatePath("/admin/projects");
+    return { success: true, project };
+  } catch (error) {
+    console.error("Failed to update project:", error);
+    return { success: false, error: "Failed to update project" };
+  }
+}
