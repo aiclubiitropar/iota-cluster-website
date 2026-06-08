@@ -65,6 +65,19 @@ export async function createTeamMember(data: {
       if (existing) return { success: false, error: "Email already exists" };
     }
 
+    const cookieStore = await cookies();
+    const token = cookieStore.get("admin_token")?.value;
+    if (!token) return { success: false, error: "Unauthorized" };
+
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET || "default_fallback_secret_for_development_only"));
+    const editorRole = (payload.position as string)?.toLowerCase() || "";
+
+    if (editorRole !== "secretary" && editorRole !== "secy") {
+      if (data.position.toLowerCase() === "secretary" || data.position.toLowerCase() === "secy") {
+        return { success: false, error: "Only the current Secretary can create a Secretary account." };
+      }
+    }
+
     const checkPos = await prisma.teamMember.findFirst({
       where: { position: { equals: data.position, mode: 'insensitive' } }
     });
@@ -133,6 +146,9 @@ export async function updateTeamMember(id: string, data: {
       if (targetRole === "secretary" || targetRole === "secy") {
         return { success: false, error: "You do not have permission to edit the Secretary." };
       }
+      if (data.position.toLowerCase() === "secretary" || data.position.toLowerCase() === "secy") {
+        return { success: false, error: "You do not have permission to assign the Secretary role." };
+      }
     }
 
     if (data.email && data.email !== existing.email) {
@@ -186,6 +202,22 @@ export async function updateTeamMember(id: string, data: {
 
 export async function deleteTeamMember(id: string) {
   try {
+    const existing = await prisma.teamMember.findUnique({ where: { id } });
+    if (!existing) return { success: false, error: "Team member not found" };
+
+    const cookieStore = await cookies();
+    const token = cookieStore.get("admin_token")?.value;
+    if (!token) return { success: false, error: "Unauthorized" };
+
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET || "default_fallback_secret_for_development_only"));
+    const editorRole = (payload.position as string)?.toLowerCase() || "";
+
+    if (editorRole !== "secretary" && editorRole !== "secy") {
+      if (existing.position.toLowerCase() === "secretary" || existing.position.toLowerCase() === "secy") {
+        return { success: false, error: "You do not have permission to delete the Secretary." };
+      }
+    }
+
     await prisma.teamMember.delete({ where: { id } });
     revalidatePath("/team");
     revalidatePath("/admin/team");
