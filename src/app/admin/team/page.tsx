@@ -87,7 +87,13 @@ export default async function AdminTeamPage({ searchParams }: { searchParams: Pr
         <form action={addMember} className={styles.form}>
           <div className={`${styles.inputGrid} ${styles.inputGrid3}`}>
             <input type="text" name="name" placeholder="Full Name *" required className={styles.input} />
-            <input type="text" name="position" placeholder="Position *" required className={styles.input} />
+            <select name="position" required className={styles.input} style={{ appearance: 'auto' }}>
+              <option value="" disabled selected>Select Position *</option>
+              <option value="Secretary">Secretary</option>
+              <option value="Joint Secretary">Joint Secretary</option>
+              <option value="Coordinator">Coordinator</option>
+              <option value="Member">Member</option>
+            </select>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <input type="url" name="imageUrl" placeholder="Image URL (Or upload below)" className={styles.input} />
               <input type="file" name="imageFile" accept="image/*" className={styles.input} style={{ padding: '0.4rem' }} />
@@ -116,7 +122,13 @@ export default async function AdminTeamPage({ searchParams }: { searchParams: Pr
                       <input type="hidden" name="id" value={m.id} />
                       <div className={`${styles.inputGrid} ${styles.inputGrid3}`}>
                         <input type="text" name="name" defaultValue={m.name} placeholder="Full Name *" required className={styles.input} />
-                        <input type="text" name="position" defaultValue={m.position} placeholder="Position *" required className={styles.input} />
+                        <select name="position" defaultValue={m.position} required className={styles.input} style={{ appearance: 'auto' }}>
+                          <option value="" disabled>Select Position *</option>
+                          <option value="Secretary">Secretary</option>
+                          <option value="Joint Secretary">Joint Secretary</option>
+                          <option value="Coordinator">Coordinator</option>
+                          <option value="Member">Member</option>
+                        </select>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                           <input type="url" name="imageUrl" defaultValue={m.imageUrl || ""} placeholder="Image URL (Or upload below)" className={styles.input} />
                           <input type="file" name="imageFile" accept="image/*" className={styles.input} style={{ padding: '0.4rem' }} />
@@ -128,7 +140,7 @@ export default async function AdminTeamPage({ searchParams }: { searchParams: Pr
                       </div>
                       <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
                         <SubmitButton defaultText="Save Changes" loadingText="Saving..." className={`btn-primary ${styles.submitBtn}`} style={{ margin: 0, flex: 1 }} />
-                        <Link href="/admin/team" className={`btn-secondary ${styles.submitBtn}`} style={{ margin: 0, flex: 1, textAlign: 'center', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}>Cancel</Link>
+                        <Link href="/admin/team" scroll={false} className={`btn-secondary ${styles.submitBtn}`} style={{ margin: 0, flex: 1, textAlign: 'center', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}>Cancel</Link>
                       </div>
                     </form>
                   </div>
@@ -142,7 +154,7 @@ export default async function AdminTeamPage({ searchParams }: { searchParams: Pr
                     <p className={styles.itemSubtitle}>{m.position}</p>
                   </div>
                   <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
-                    <Link href={`/admin/team?edit=${m.id}`} className="p-2 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded hover:bg-[var(--accent-cyan)] hover:border-[var(--accent-cyan)] transition flex items-center justify-center text-[var(--text-primary)] hover:text-black" title="Edit" style={{ height: 'fit-content', alignSelf: 'center' }}>
+                    <Link href={`/admin/team?edit=${m.id}`} scroll={false} className="p-2 bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded hover:bg-[var(--accent-cyan)] hover:border-[var(--accent-cyan)] transition flex items-center justify-center text-[var(--text-primary)] hover:text-black" title="Edit" style={{ height: 'fit-content', alignSelf: 'center' }}>
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                     </Link>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
