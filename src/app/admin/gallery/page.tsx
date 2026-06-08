@@ -2,6 +2,8 @@ import { getGalleryImages, createGalleryImage, reorderGalleryImage } from "@/act
 import { revalidatePath } from "next/cache";
 import styles from "../admin.module.css";
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminGalleryPage() {
   const images = await getGalleryImages();
 

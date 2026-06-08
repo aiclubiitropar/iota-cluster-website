@@ -2,6 +2,8 @@ import { getProjects, createProject, reorderProject } from "@/actions/projects";
 import { revalidatePath } from "next/cache";
 import styles from "../admin.module.css";
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminProjectsPage() {
   const projects = await getProjects();
 

@@ -2,6 +2,8 @@ import { getTeamMembers, createTeamMember, reorderTeamMember } from "@/actions/t
 import { revalidatePath } from "next/cache";
 import styles from "../admin.module.css";
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminTeamPage() {
   const members = await getTeamMembers();
 
