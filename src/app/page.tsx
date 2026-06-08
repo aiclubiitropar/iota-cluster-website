@@ -1,12 +1,15 @@
 import Link from "next/link";
 import styles from "./page.module.css";
 import { getProjects } from "@/actions/projects";
+import { getGalleryImages } from "@/actions/gallery";
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   const projects = await getProjects();
   const recentProjects = projects.slice(0, 3);
+  const galleryImages = await getGalleryImages();
+  const recentGallery = galleryImages.slice(0, 8); // show max 8 images
 
   return (
     <div className={styles.container}>
@@ -73,6 +76,25 @@ export default async function Home() {
                     <span key={tag} className={styles.projectTag}>{tag.trim()}</span>
                   ))}
                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {recentGallery.length > 0 && (
+        <div className={styles.gallerySection}>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>
+              Event <span className="text-gradient">Gallery</span>
+            </h2>
+          </div>
+          
+          <div className={styles.galleryGrid}>
+            {recentGallery.map(img => (
+              <div key={img.id} className={`glass-panel ${styles.galleryImageCard}`}>
+                <img src={img.imageUrl} alt={img.title} className={styles.galleryImage} />
+                <div className={styles.galleryTitle}>{img.title}</div>
               </div>
             ))}
           </div>

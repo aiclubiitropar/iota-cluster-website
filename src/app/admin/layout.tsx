@@ -16,6 +16,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link href="/admin/projects" className={styles.navLink}>
             Manage Projects
           </Link>
+          <Link href="/admin/gallery" className={styles.navLink}>
+            Manage Gallery
+          </Link>
         </nav>
       </aside>
       <main className={`glass-panel ${styles.mainArea}`}>

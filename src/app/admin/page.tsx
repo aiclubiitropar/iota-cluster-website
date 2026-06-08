@@ -21,6 +21,12 @@ export default function AdminPage() {
           <p className={styles.cardDesc}>Upload new technical projects or hackathon submissions.</p>
           <Link href="/admin/projects" className={styles.cardLink}>Manage Projects &rarr;</Link>
         </div>
+
+        <div className={`glass-panel ${styles.card}`} style={{ borderLeftColor: 'var(--accent-pink, #EC4899)' }}>
+          <h2 className={styles.cardTitle}>Gallery Management</h2>
+          <p className={styles.cardDesc}>Upload photos of events, hackathons, and sessions.</p>
+          <Link href="/admin/gallery" className={styles.cardLink}>Manage Gallery &rarr;</Link>
+        </div>
       </div>
     </div>
   );
