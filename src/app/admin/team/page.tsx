@@ -16,8 +16,8 @@ export default async function AdminTeamPage({ searchParams }: { searchParams: Pr
     await createTeamMember({
       name: formData.get("name") as string,
       position: formData.get("position") as string,
-      email: formData.get("email") as string || undefined,
-      password: formData.get("password") as string || undefined,
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
       imageUrl: formData.get("imageUrl") as string || undefined,
       linkedinUrl: formData.get("linkedinUrl") as string || undefined,
       githubUrl: formData.get("githubUrl") as string || undefined,
