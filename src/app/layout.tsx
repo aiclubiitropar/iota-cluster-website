@@ -24,10 +24,10 @@ export const metadata: Metadata = {
     siteName: "Iota Cluster",
     images: [
       {
-        url: "/logo.png",
-        width: 800,
-        height: 800,
-        alt: "Iota Cluster Logo",
+        url: "/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Iota Cluster Banner",
       },
     ],
     locale: "en_IN",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Iota Cluster | AI Club of IIT Ropar",
     description: "The Artificial Intelligence and Machine Learning club at the Indian Institute of Technology Ropar.",
-    images: ["/logo.png"],
+    images: ["/opengraph-image.png"],
   },
 };
 
