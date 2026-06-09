@@ -137,7 +137,7 @@ export default async function Home() {
       )}
 
       {/* Contact Section */}
-      <div className={`glass-panel ${styles.contactSection}`} style={{ marginTop: '4rem', padding: '3rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem' }}>
+      <div id="contact" className={`glass-panel ${styles.contactSection}`} style={{ marginTop: '4rem', padding: '3rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem' }}>
         <h2 className={styles.sectionTitle}>
           Reach us <span className="text-gradient">at</span>
         </h2>

@@ -39,6 +39,7 @@ export default function Navbar() {
     { label: "Resources", href: "/resources" },
     { label: "AI Soc", href: "/ai-soc", isSpecial: true },
     { label: "Blogs", href: "/blogs" },
+    { label: "Contact Us", href: "/#contact" },
   ];
 
   return (
