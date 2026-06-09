@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://iota-cluster.vercel.app"),
+  metadataBase: new URL("https://iota-cluster-website.vercel.app"),
   title: {
     default: "Iota Cluster | AI Club of IIT Ropar",
     template: "%s | Iota Cluster",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Iota Cluster | AI Club of IIT Ropar",
     description: "The Artificial Intelligence and Machine Learning club at the Indian Institute of Technology Ropar.",
-    url: "https://iota-cluster.vercel.app", // Adjust if you have a custom domain
+    url: "https://iota-cluster-website.vercel.app", // Adjust if you have a custom domain
     siteName: "Iota Cluster",
     images: [
       {

@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import prisma from '@/lib/prisma';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://iota-cluster.vercel.app'; // Change this to your production domain
+  const baseUrl = 'https://iota-cluster-website.vercel.app'; // Change this to your production domain
 
   // Define static routes
   const staticRoutes = [
