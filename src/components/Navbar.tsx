@@ -61,6 +61,12 @@ export default function Navbar() {
                   key={item.href} 
                   href={item.href} 
                   className={item.isSpecial ? `${styles.navLink} ${styles.aiSocNav}` : styles.navLink}
+                  onClick={(e) => {
+                    if (item.href === "/#contact" && pathname === "/") {
+                      e.preventDefault();
+                      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
                 >
                   {item.label}
                 </Link>
@@ -89,6 +95,13 @@ export default function Navbar() {
               key={item.href} 
               href={item.href} 
               className={item.isSpecial ? `${styles.mobileNavLink} ${styles.aiSocNav}` : styles.mobileNavLink}
+              onClick={(e) => {
+                if (item.href === "/#contact" && pathname === "/") {
+                  e.preventDefault();
+                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                  setIsMenuOpen(false);
+                }
+              }}
             >
               {item.label}
             </Link>
