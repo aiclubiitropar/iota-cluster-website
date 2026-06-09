@@ -10,6 +10,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://iota-cluster.vercel.app"),
   title: {
     default: "Iota Cluster | AI Club of IIT Ropar",
     template: "%s | Iota Cluster",
