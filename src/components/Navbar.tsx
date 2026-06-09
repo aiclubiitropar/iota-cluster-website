@@ -34,6 +34,7 @@ export default function Navbar() {
     { label: "Home", href: "/" },
     { label: "Team", href: "/team" },
     { label: "Projects", href: "/projects" },
+    { label: "Events", href: "/events" },
     { label: "Gallery", href: "/gallery" },
     { label: "Resources", href: "/resources" },
     { label: "AI Soc", href: "/ai-soc", isSpecial: true },

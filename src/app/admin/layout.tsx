@@ -33,6 +33,11 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               Manage Gallery
             </Link>
           )}
+          {!isMember && (
+            <Link href="/admin/events" className={styles.navLink}>
+              Manage Events
+            </Link>
+          )}
           <Link href="/admin/blogs" className={styles.navLink}>
             Manage Blogs
           </Link>
