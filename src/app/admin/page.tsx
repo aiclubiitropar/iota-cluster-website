@@ -45,6 +45,14 @@ export default async function AdminPage() {
           </div>
         )}
 
+        {!isMember && (
+          <div className={`glass-panel ${styles.card}`} style={{ borderLeftColor: 'var(--accent-purple)' }}>
+            <h2 className={styles.cardTitle}>Events Management</h2>
+            <p className={styles.cardDesc}>Manage upcoming and past events, unstop links, and deployments.</p>
+            <Link href="/admin/events" className={styles.cardLink}>Manage Events &rarr;</Link>
+          </div>
+        )}
+
         <div className={`glass-panel ${styles.card}`} style={{ borderLeftColor: 'var(--accent-cyan)' }}>
           <h2 className={styles.cardTitle}>Blog Management</h2>
           <p className={styles.cardDesc}>Write, edit, and publish rich-text articles and tutorials.</p>
