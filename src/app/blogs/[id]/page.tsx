@@ -3,7 +3,39 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import styles from "./page.module.css";
 
+import { Metadata } from "next";
+
 export const dynamic = 'force-dynamic';
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const blog = await prisma.blog.findUnique({ where: { id } });
+
+  if (!blog) {
+    return {
+      title: "Blog Not Found",
+    };
+  }
+
+  return {
+    title: blog.title,
+    description: blog.summary,
+    openGraph: {
+      title: blog.title,
+      description: blog.summary,
+      images: blog.imageUrl ? [blog.imageUrl] : [],
+      type: "article",
+      authors: [blog.author],
+      publishedTime: blog.createdAt.toISOString(),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: blog.title,
+      description: blog.summary,
+      images: blog.imageUrl ? [blog.imageUrl] : [],
+    },
+  };
+}
 
 export default async function BlogPostPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
