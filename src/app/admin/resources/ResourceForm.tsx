@@ -14,7 +14,6 @@ export default function ResourceForm({ mode, initialData }: Props) {
   const formRef = useRef<HTMLFormElement>(null);
   const [isPending, startTransition] = useTransition();
 
-  // Resource links state — each entry has a label and a url
   const [resourceLinks, setResourceLinks] = useState<{ label: string; url: string }[]>(
     () => {
       if (initialData?.resourceLinks?.length) {
@@ -30,6 +29,14 @@ export default function ResourceForm({ mode, initialData }: Props) {
       return [];
     }
   );
+
+  const [existingFiles, setExistingFiles] = useState<string[]>(
+    () => initialData?.fileUrls || []
+  );
+
+  const removeExistingFile = (index: number) => {
+    setExistingFiles(prev => prev.filter((_, i) => i !== index));
+  };
 
   const addLink = () => setResourceLinks(prev => [...prev, { label: "", url: "" }]);
   const removeLink = (i: number) => setResourceLinks(prev => prev.filter((_, idx) => idx !== i));
@@ -85,7 +92,7 @@ export default function ResourceForm({ mode, initialData }: Props) {
       {mode === "edit" && (
         <>
           <input type="hidden" name="id" value={initialData.id} />
-          <input type="hidden" name="existingFiles" value={JSON.stringify(initialData.fileUrls || [])} />
+          <input type="hidden" name="existingFiles" value={JSON.stringify(existingFiles)} />
         </>
       )}
 
@@ -115,8 +122,20 @@ export default function ResourceForm({ mode, initialData }: Props) {
         />
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
           <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-            {mode === "add" ? "Upload Attachments (Multiple allowed)" : `Add More Attachments (Existing: ${initialData?.fileUrls?.length || 0})`}
+            {mode === "add" ? "Upload Attachments (Multiple allowed)" : "Add More Attachments"}
           </label>
+          {mode === "edit" && existingFiles.length > 0 && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem', marginBottom: '0.5rem' }}>
+              {existingFiles.map((url, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.4rem 0.6rem', background: 'var(--glass-bg)', borderRadius: '6px', border: '1px solid var(--glass-border)', fontSize: '0.8rem' }}>
+                  <a href={url} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-cyan)', textDecoration: 'underline', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>
+                    Attachment {i + 1}
+                  </a>
+                  <button type="button" onClick={() => removeExistingFile(i)} style={{ color: '#ff6b6b', background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', lineHeight: 1, padding: '0 0.4rem' }} title="Remove this attachment">&times;</button>
+                </div>
+              ))}
+            </div>
+          )}
           <input type="file" name="files" multiple className={styles.input} style={{ padding: '0.4rem' }} />
         </div>
       </div>
