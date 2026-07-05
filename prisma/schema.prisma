@@ -64,14 +64,15 @@ model Blog {
 }
 
 model Resource {
-  id           String   @id @default(uuid())
-  title        String
-  description  String?
-  fileUrls     String[] // Array of file URLs
-  youtubeUrl   String?
-  order        Int      @default(0)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id             String   @id @default(uuid())
+  title          String
+  description    String?
+  fileUrls       String[] // Array of file URLs
+  youtubeUrl     String?
+  resourceLinks  String[] // Array of reference/resource links
+  order          Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model Event {

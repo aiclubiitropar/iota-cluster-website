@@ -59,10 +59,11 @@ export default async function AdminResourcesPage({ searchParams }: { searchParam
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <p className={styles.itemTitle}>Step {i + 1}: {r.title}</p>
                     <p className={styles.itemDesc}>{r.description}</p>
-                    {(r.fileUrls?.length > 0 || r.youtubeUrl) && (
+                    {(r.fileUrls?.length > 0 || r.youtubeUrl || r.resourceLinks?.length > 0) && (
                       <p className={styles.itemSubtitle} style={{ marginTop: '0.5rem', color: 'var(--accent-cyan)' }}>
                         {r.youtubeUrl && "▶ Video Included  "}
-                        {r.fileUrls?.length > 0 && `📎 ${r.fileUrls.length} File(s)`}
+                        {r.fileUrls?.length > 0 && `📎 ${r.fileUrls.length} File(s)  `}
+                        {r.resourceLinks?.length > 0 && `🔗 ${r.resourceLinks.length} Link(s)`}
                       </p>
                     )}
                   </div>

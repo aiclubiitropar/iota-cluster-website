@@ -86,6 +86,37 @@ export default async function ResourcesPage() {
                         ))}
                       </div>
                     )}
+
+                    {r.resourceLinks && r.resourceLinks.length > 0 && (
+                      <div className={styles.filesList}>
+                        {r.resourceLinks.map((entry, i) => {
+                          let label = `Resource ${i + 1}`;
+                          let href = entry;
+                          try {
+                            const parsed = JSON.parse(entry) as { label?: string; url: string };
+                            href = parsed.url;
+                            if (parsed.label?.trim()) label = parsed.label.trim();
+                          } catch { /* plain URL — use as-is */ }
+
+                          return (
+                            <a
+                              key={i}
+                              href={href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={styles.filePill}
+                              style={{ borderColor: 'var(--accent-purple)' }}
+                            >
+                              <svg className={styles.fileIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                              </svg>
+                              {label}
+                            </a>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

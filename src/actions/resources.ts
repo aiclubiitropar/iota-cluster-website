@@ -26,6 +26,7 @@ export async function createResource(data: {
   description?: string;
   youtubeUrl?: string;
   files: File[];
+  resourceLinks?: string[];
 }) {
   try {
     await checkAdminAccess();
@@ -46,6 +47,7 @@ export async function createResource(data: {
         description: data.description || null,
         youtubeUrl: data.youtubeUrl || null,
         fileUrls: fileUrls,
+        resourceLinks: data.resourceLinks || [],
       }
     });
 
@@ -64,6 +66,7 @@ export async function updateResource(id: string, data: {
   youtubeUrl?: string;
   files?: File[];
   existingFiles?: string[];
+  resourceLinks?: string[];
 }) {
   try {
     await checkAdminAccess();
@@ -89,6 +92,7 @@ export async function updateResource(id: string, data: {
         description: data.description || null,
         youtubeUrl: data.youtubeUrl || null,
         fileUrls: fileUrls,
+        resourceLinks: data.resourceLinks || [],
       }
     });
 
@@ -148,11 +152,18 @@ import { redirect } from "next/navigation";
 
 export async function addResourceAction(formData: FormData) {
   const fileEntries = formData.getAll("files") as File[];
+  const resourceLinksStr = formData.get("resourceLinks") as string;
+  let resourceLinks: string[] = [];
+  try {
+    if (resourceLinksStr) resourceLinks = JSON.parse(resourceLinksStr);
+  } catch(e) {}
+
   await createResource({
     title: formData.get("title") as string,
     description: formData.get("description") as string,
     youtubeUrl: formData.get("youtubeUrl") as string || undefined,
     files: fileEntries,
+    resourceLinks,
   });
 }
 
@@ -165,12 +176,19 @@ export async function editResourceAction(formData: FormData) {
     if (existingFilesStr) existingFiles = JSON.parse(existingFilesStr);
   } catch(e) {}
 
+  const resourceLinksStr = formData.get("resourceLinks") as string;
+  let resourceLinks: string[] = [];
+  try {
+    if (resourceLinksStr) resourceLinks = JSON.parse(resourceLinksStr);
+  } catch(e) {}
+
   const result = await updateResource(id, {
     title: formData.get("title") as string,
     description: formData.get("description") as string,
     youtubeUrl: formData.get("youtubeUrl") as string || undefined,
     files: fileEntries,
     existingFiles,
+    resourceLinks,
   });
 
   if (!result.success) {
